@@ -398,13 +398,13 @@
         <div id="staff-view" class="view-panel">
           <div class="section-header">
             <div>
-              <h1 class="section-title">📋 Staff Operations Workspace</h1>
+              <h1 class="section-title">Staff Operations Workspace</h1>
               <p class="section-subtitle">Customer CRM, spreadsheet exports, payment delay notifications & batch billing.</p>
             </div>
             <div style="display: flex; gap: 8px;">
-              <button class="btn btn-secondary btn-sm" onclick="downloadCustomerSpreadsheet()">📥 Download Customer Spreadsheet (.csv)</button>
+              <button class="btn btn-secondary btn-sm" onclick="downloadCustomerSpreadsheet()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>Download Customer Spreadsheet (.csv)</button>
               <button class="btn btn-sm" onclick="openModal('add-customer-modal')">+ Add Customer</button>
-              <button class="btn btn-sm" onclick="triggerStaffBatchBilling()" style="background: #059669; border-color: #059669;">⚡ Run Automated Billing</button>
+              <button class="btn btn-sm" onclick="triggerStaffBatchBilling()" style="background: #059669; border-color: #059669;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>Run Automated Billing</button>
             </div>
           </div>
 
@@ -413,9 +413,9 @@
           </div>
 
           <!-- Customer CRM Spreadsheet Center -->
-          <div class="card">
+          <div class="card" id="staff-crm-section">
             <div class="card-header">
-              <div class="card-title">👥 Customer CRM Center (Clean View - Replaces Messy Spreadsheets)</div>
+              <div class="card-title">Customer CRM Center (Clean View - Replaces Messy Spreadsheets)</div>
               <span style="font-size: 0.8rem; color: var(--text-muted);">Organized customer portfolio with 1-click CSV download</span>
             </div>
             <div class="table-container">
@@ -440,7 +440,7 @@
           </div>
 
           <!-- Subscription Queue & Notifications -->
-          <div class="card">
+          <div class="card" id="staff-subs-section">
             <div class="card-header">
               <div class="card-title">Subscription Lifecycle Queue & Chase Alerts</div>
               <div class="filter-tabs" style="margin-bottom: 0;">
@@ -473,7 +473,7 @@
           </div>
 
           <!-- Staff Operations: Real-Time Disallow & Instant 100% Refund Engine -->
-          <div class="card">
+          <div class="card" id="staff-refund-section">
             <div class="card-header">
               <div>
                 <div class="card-title">Organization Subscriptions (Real-Time Disallow & 100% Refund Engine)</div>
@@ -503,9 +503,9 @@
           </div>
 
           <!-- Pending Invoices & Payment Delay Notices -->
-          <div class="card">
+          <div class="card" id="staff-notifs-section">
             <div class="card-header">
-              <div class="card-title">🔔 Overdue Invoices & Delay Notice Dispatch</div>
+              <div class="card-title">Overdue Invoices & Delay Notice Dispatch</div>
               <span style="font-size: 0.8rem; color: var(--text-muted);">1-click payment delay notices sent directly to customer contact</span>
             </div>
             <div class="table-container">

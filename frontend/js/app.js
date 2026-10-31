@@ -88,7 +88,7 @@ function setSession(user) {
     switchSidebarTab("admin-view");
     loadAdminMetrics();
     loadAdminSubscriptions();
-    loadAdminPlans();
+    loadAdminManagePlans();
   } else if (user.role === "staff") {
     switchSidebarTab("staff-view");
     loadStaffCustomers();
@@ -152,24 +152,41 @@ function renderSidebar(role) {
   } else if (role === "staff") {
     html = `
       <div class="sidebar-title">Operations Desk</div>
-      <div class="sidebar-item active" onclick="switchSidebarTab('staff-view')">
-        <span class="icon">📋</span>
-        <span>Staff Workspace</span>
+      <div class="sidebar-item active" id="side-staff-dash" title="Operations Overview" onclick="switchSidebarTab('staff-view')">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+        </span>
+        <span>Operations Overview</span>
       </div>
-      <div class="sidebar-item" onclick="switchSidebarTab('staff-crm')">
-        <span class="icon">👥</span>
-        <span>Customer CRM Center</span>
+      <div class="sidebar-item" id="side-staff-crm" title="Customer CRM" onclick="switchSidebarTab('staff-crm')">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </span>
+        <span>Customer CRM</span>
       </div>
-      <div class="sidebar-item" onclick="switchSidebarTab('staff-subs')">
-        <span class="icon">📨</span>
+      <div class="sidebar-item" id="side-staff-subs" title="Subscription Queue" onclick="switchSidebarTab('staff-subs')">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        </span>
         <span>Subscription Queue</span>
       </div>
-      <div class="sidebar-item" onclick="switchSidebarTab('staff-notifs')">
-        <span class="icon">🔔</span>
-        <span>Payment Delay Notices</span>
+      <div class="sidebar-item" id="side-staff-refund" title="Disallow & Refund" onclick="switchSidebarTab('staff-refund')">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
+        </span>
+        <span>Disallow & Refund</span>
       </div>
-      <div class="sidebar-item" onclick="triggerStaffBatchBilling()" style="color: #059669; font-weight: 600;">
-        <span class="icon">⚡</span>
+      <div class="sidebar-item" id="side-staff-notifs" title="Delay Notices" onclick="switchSidebarTab('staff-notifs')">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+        </span>
+        <span>Delay Notices</span>
+      </div>
+      <div class="sidebar-title">Batch Operations</div>
+      <div class="sidebar-item" title="Run Batch Billing" onclick="triggerStaffBatchBilling()" style="color: #059669; font-weight: 600;">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        </span>
         <span>Run Batch Billing</span>
       </div>
     `;
@@ -234,6 +251,28 @@ function switchSidebarTab(tabName) {
     loadStaffSubscriptions();
     loadStaffInvoices();
     loadStaffRefundSubscriptions();
+
+    if (tabName === "staff-view") {
+      const el = document.getElementById("side-staff-dash");
+      if (el) el.classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (tabName === "staff-crm") {
+      const el = document.getElementById("side-staff-crm");
+      if (el) el.classList.add("active");
+      document.getElementById("staff-crm-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else if (tabName === "staff-subs") {
+      const el = document.getElementById("side-staff-subs");
+      if (el) el.classList.add("active");
+      document.getElementById("staff-subs-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else if (tabName === "staff-refund") {
+      const el = document.getElementById("side-staff-refund");
+      if (el) el.classList.add("active");
+      document.getElementById("staff-refund-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else if (tabName === "staff-notifs") {
+      const el = document.getElementById("side-staff-notifs");
+      if (el) el.classList.add("active");
+      document.getElementById("staff-notifs-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   } else {
     document.getElementById("customer-view").classList.add("active");
   }
@@ -555,6 +594,10 @@ function updateLivePlanPreview() {
   if (pCap) pCap.textContent = `Max ${cap} Subscribers`;
   const pDeadline = document.getElementById("preview-plan-deadline");
   if (pDeadline) pDeadline.textContent = deadline;
+}
+
+function loadAdminPlans() {
+  loadAdminManagePlans();
 }
 
 async function loadAdminManagePlans() {

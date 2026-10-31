@@ -189,8 +189,10 @@ def get_staff_commissions(db: Session = Depends(get_db)):
         else:
             plan_subs = db.query(Subscription).filter(Subscription.status == "Active").all()
 
-        plan_revenue = sum(sub.total_amount for sub in plan_subs)
-        earned = round((s.commission_rate / 100.0) * plan_revenue, 2)
+        comm_rate = float(s.commission_rate if s.commission_rate is not None else 5.0)
+        s.commission_rate = comm_rate
+        plan_revenue = sum(float(sub.total_amount or 0.0) for sub in plan_subs)
+        earned = round((comm_rate / 100.0) * plan_revenue, 2)
         s.total_commission_earned = earned
 
         results.append({
@@ -199,7 +201,7 @@ def get_staff_commissions(db: Session = Depends(get_db)):
             "email": s.email,
             "phone": s.phone or "N/A",
             "assigned_plan": s.assigned_plan or "All Plans",
-            "commission_rate": s.commission_rate or 5.0,
+            "commission_rate": comm_rate,
             "active_clients_count": len(plan_subs),
             "generated_revenue": round(plan_revenue, 2),
             "total_commission_earned": earned
