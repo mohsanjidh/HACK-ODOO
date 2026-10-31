@@ -38,7 +38,7 @@ def list_subscriptions(
     expiring_soon: Optional[bool] = False,
     db: Session = Depends(get_db)
 ):
-    query = db.query(Subscription).join(Plan)
+    query = db.query(Subscription).outerjoin(Plan)
 
     if category and category != "All":
         query = query.filter(Plan.category == category)

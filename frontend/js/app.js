@@ -1078,6 +1078,12 @@ function updateLivePlanPreview() {
   if (pDeadline) pDeadline.textContent = deadline;
 }
 
+function loadAdminPlans() {
+  if (typeof loadAdminManagePlans === 'function') {
+    return loadAdminManagePlans();
+  }
+}
+
 async function loadAdminManagePlans() {
   const grid = document.getElementById("admin-detailed-plans-grid");
   if (!grid) return;

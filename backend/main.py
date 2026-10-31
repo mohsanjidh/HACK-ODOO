@@ -8,6 +8,7 @@ from backend.core.config import PROJECT_NAME, VERSION
 from backend.core.database import Base, engine, SessionLocal
 from backend.models import User, Plan, Variant, Subscription, Invoice, Payment, TaxRule, DiscountRule
 from backend.routers import admin, staff, auth, user
+import backend.routers.user_extensions
 
 # Ensure all database tables exist on startup
 Base.metadata.create_all(bind=engine)
