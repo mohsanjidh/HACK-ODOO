@@ -86,11 +86,15 @@ HACK/
 * **Frontend-Backend Integration**:
   - Connect the views to Dharshin's and Mrinal's FastAPI endpoints using `frontend/js/api.js`.
 
-### 4. 👨‍💼 Mohammed Sanjidh S (Base Architecture & Security)
+### 4. 👨‍💼 Mohammed Sanjidh S (Base Architecture, Security & Frontend System Design)
 * **Core Infrastructure**:
   - FastAPI app initialization, CORS middleware, global error handling.
   - JWT token utilities and bcrypt password hashing.
   - Root `README.md` and dependency setup.
+* **Frontend System Design (Co-lead with D Haritha)**:
+  - Architecture of the 3-page interface (Admin, Staff, Customer views).
+  - Clean UI template structure with direct form/table bindings to the backend APIs.
+  - Ensuring intuitive navigation, clean role switching, and consistent spacing across all 3 portals.
 
 ---
 

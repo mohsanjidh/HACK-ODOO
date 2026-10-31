@@ -4,10 +4,11 @@ All team members must log every code change, module creation, and bug fix here p
 
 ---
 
-## 👨‍💼 Mohammed Sanjidh S (Architecture & Base Setup)
+## 👨‍💼 Mohammed Sanjidh S (Architecture, Base Setup & Frontend Design)
 
 - **[10:15 AM]** Created `IMPLEMENTATION_PLAN.md` with team work distribution, heads-up onboarding guide, and file ownership boundaries.
 - **[10:15 AM]** Initialized `CHANGELOG.md` for mandatory cross-team change tracking.
+- **[12:00 PM]** Defined 3-page UI system architecture and template specifications (Admin, Staff, Customer views) in collaboration with D Haritha.
 
 ---
 
