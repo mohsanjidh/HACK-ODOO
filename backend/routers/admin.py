@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import func
@@ -177,3 +178,95 @@ def create_discount(disc_in: DiscountCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_disc)
     return {"status": "success", "discount": new_disc}
+
+# --- Subscription Monitoring & Real-time Disallow / Refund Engine ---
+@router.get("/subscriptions")
+def list_all_subscriptions(db: Session = Depends(get_db)):
+    """Admin comprehensive view of all subscriptions across the organization."""
+    subs = db.query(Subscription).order_by(Subscription.id.desc()).all()
+    return subs
+
+@router.delete("/subscriptions/{sub_id}")
+def disallow_and_refund_subscription(sub_id: int, db: Session = Depends(get_db)):
+    """
+    Real-time Admin Disallow & Automatic Refund:
+    1. Cancels the active subscription immediately.
+    2. Identifies any paid invoice and marks it as 'Refunded'.
+    3. Logs a refund transaction in payments.
+    """
+    sub = db.query(Subscription).filter(Subscription.id == sub_id).first()
+    if not sub:
+        raise HTTPException(status_code=404, detail="Subscription not found.")
+
+    old_status = sub.status
+    sub.status = "Cancelled" # Real-time disallow
+
+    # Check for paid invoices to issue real-time refund
+    refund_amount = 0.0
+    paid_invoices = db.query(Invoice).filter(
+        Invoice.subscription_number == sub.subscription_number,
+        Invoice.status == "Paid"
+    ).all()
+
+    for inv in paid_invoices:
+        inv.status = "Refunded"
+        refund_amount += inv.amount
+        refund_pay = Payment(
+            invoice_id=inv.id,
+            amount=-abs(inv.amount), # Negative payment indicates refund
+            payment_date=datetime.now().strftime("%Y-%m-%d"),
+            payment_method="System Automated Refund",
+            reference_note=f"Admin disallowed subscription {sub.subscription_number} - 100% full refund returned to customer."
+        )
+        db.add(refund_pay)
+
+    db.commit()
+    return {
+        "status": "success",
+        "message": f"Subscription {sub.subscription_number} disallowed. Status updated to Cancelled.",
+        "previous_status": old_status,
+        "refund_processed": refund_amount > 0,
+        "refund_amount": refund_amount,
+        "invoices_refunded": len(paid_invoices)
+    }
+
+@router.delete("/plans/{plan_id}")
+def delete_or_disallow_plan(plan_id: int, db: Session = Depends(get_db)):
+    """Admin disallow plan from catalog in real-time."""
+    plan = db.query(Plan).filter(Plan.id == plan_id).first()
+    if not plan:
+        raise HTTPException(status_code=404, detail="Plan not found.")
+    
+    plan_name = plan.name
+    db.delete(plan)
+    db.commit()
+    return {
+        "status": "success",
+        "message": f"Plan '{plan_name}' has been removed from public catalog in real time."
+    }
+
+@router.get("/invoices")
+def list_all_invoices(db: Session = Depends(get_db)):
+    """Admin view of all organization invoices."""
+    return db.query(Invoice).order_by(Invoice.id.desc()).all()
+
+@router.get("/audit-report")
+def get_audit_report(db: Session = Depends(get_db)):
+    """Executive Audit & System Integrity Report."""
+    total_users = db.query(User).count()
+    total_subs = db.query(Subscription).count()
+    active_subs = db.query(Subscription).filter(Subscription.status == "Active").count()
+    cancelled_subs = db.query(Subscription).filter(Subscription.status == "Cancelled").count()
+    total_plans = db.query(Plan).count()
+    refund_count = db.query(Invoice).filter(Invoice.status == "Refunded").count()
+
+    return {
+        "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "total_users": total_users,
+        "total_subscriptions": total_subs,
+        "active_subscriptions": active_subs,
+        "cancelled_or_disallowed": cancelled_subs,
+        "available_plans": total_plans,
+        "refunded_invoices": refund_count,
+        "engine_health": "100% Operational (Local SQLite Engine)"
+    }

@@ -3,401 +3,474 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Brightloop — Subscription Management System</title>
+  <title>Brightloop — Enterprise Subscription Management</title>
   <link rel="stylesheet" href="/static/css/styles.css">
-  <style>
-    .auth-banner {
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-      border-radius: 8px;
-      padding: 12px 18px;
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .pwd-check {
-      font-size: 0.75rem;
-      color: #64748b;
-      margin-top: 4px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .pwd-item.valid {
-      color: #10b981;
-      font-weight: 600;
-    }
-    .demo-btn-group {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-      padding-top: 12px;
-      border-top: 1px dashed var(--border);
-    }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <!-- Top Navigation -->
-  <header class="navbar">
-    <div class="nav-brand">
-      <div class="brand-logo">B</div>
-      <div>
-        <div class="brand-title">Brightloop Software</div>
-        <div class="brand-sub">Subscription Management System</div>
-      </div>
-    </div>
-
-    <!-- Role Switcher (Visible according to logged in user) -->
-    <div class="role-switcher" id="role-nav">
-      <button class="role-btn active" id="btn-nav-admin" onclick="switchView('admin')">👑 Admin Portal</button>
-      <button class="role-btn" id="btn-nav-staff" onclick="switchView('staff')">📋 Staff Operations</button>
-      <button class="role-btn" id="btn-nav-customer" onclick="switchView('customer')">👤 Customer View</button>
-    </div>
-
-    <!-- User Auth Status -->
-    <div style="display: flex; align-items: center; gap: 12px;">
-      <div id="auth-user-info" style="display: none; align-items: center; gap: 8px; font-size: 0.85rem;">
-        <span id="user-display-name" style="font-weight: 700;">Admin</span>
-        <span id="user-display-role" class="badge badge-active">ADMIN</span>
-        <button class="btn btn-outline btn-sm" onclick="logoutUser()">Log Out</button>
-      </div>
-
-      <div id="auth-buttons" style="display: flex; gap: 8px;">
-        <button class="btn btn-outline btn-sm" onclick="openModal('login-modal')">Sign In</button>
-        <button class="btn btn-primary btn-sm" onclick="openModal('register-modal')">Create Account</button>
-      </div>
-    </div>
-  </header>
-
-  <main class="container">
-
-    <!-- Active Session Banner -->
-    <div class="auth-banner" id="session-banner">
-      <div>
-        <span style="font-weight: 700; color: #1e40af;">🔑 Active Session: </span>
-        <span id="session-user-text">Logged in as Bhavya Admin (admin@brightloop.local)</span>
-      </div>
-      <div>
-        <span style="font-size: 0.75rem; color: #3b82f6;">● Local SQLite Engine (~32ms)</span>
-      </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- 1. ADMIN PORTAL                           -->
-    <!-- ========================================== -->
-    <section id="admin-view" class="view-section active">
-      <div class="toolbar">
-        <div>
-          <h2 style="font-size: 1.4rem; font-weight: 800;">Executive Finance Dashboard</h2>
-          <p style="font-size: 0.85rem; color: var(--text-muted);">Real-time revenue, recurring subscription metrics, and receivables.</p>
-        </div>
-        <div style="display: flex; gap: 8px;">
-          <button class="btn btn-outline" onclick="loadAdminMetrics()">🔄 Refresh Metrics</button>
-          <button class="btn btn-primary" onclick="openModal('add-plan-modal')">+ Create Plan</button>
-          <button class="btn btn-primary" onclick="openModal('add-staff-modal')">+ Add Staff</button>
-        </div>
-      </div>
-
-      <!-- KPI Cards -->
-      <div class="kpi-grid">
-        <div class="kpi-card">
-          <div class="kpi-title">Monthly Recurring Revenue (MRR)</div>
-          <div class="kpi-value" id="admin-mrr">₹0.00</div>
-          <div class="kpi-sub" id="admin-arr">ARR: ₹0.00</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-title">Total Cash Collected</div>
-          <div class="kpi-value" id="admin-revenue" style="color: var(--success);">₹0.00</div>
-          <div class="kpi-sub" id="admin-tax">Taxes Collected: ₹0.00</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-title">Active Subscriptions</div>
-          <div class="kpi-value" id="admin-active-subs">0</div>
-          <div class="kpi-sub" id="admin-total-subs">Total in records: 0</div>
-        </div>
-        <div class="kpi-card kpi-alert">
-          <div class="kpi-title">Overdue Receivables (Debt)</div>
-          <div class="kpi-value" id="admin-overdue">₹0.00</div>
-          <div class="kpi-sub" style="color: var(--danger);">Unpaid money pending collection</div>
-        </div>
-      </div>
-
-      <!-- Admin Tabs -->
-      <div class="pills">
-        <button class="pill active" onclick="switchAdminTab('plans')">📦 Subscription Plans</button>
-        <button class="pill" onclick="switchAdminTab('variants')">🏷️ Product Variants (+560 Odoo Brand)</button>
-        <button class="pill" onclick="switchAdminTab('staff')">👥 Staff Members</button>
-      </div>
-
-      <!-- Plans Tab -->
-      <div id="admin-tab-plans" class="card-table">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Plan Name</th>
-              <th>Category</th>
-              <th>Billing Frequency</th>
-              <th>Base Price</th>
-              <th>Min Qty</th>
-              <th>Flags</th>
-            </tr>
-          </thead>
-          <tbody id="admin-plans-table">
-            <tr><td colspan="7" style="text-align: center;">Loading plans...</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Variants Tab -->
-      <div id="admin-tab-variants" class="card-table" style="display: none;">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Product Name</th>
-              <th>Variant Option</th>
-              <th>Extra Price Delta</th>
-              <th>Notes</th>
-            </tr>
-          </thead>
-          <tbody id="admin-variants-table">
-            <tr><td colspan="5" style="text-align: center;">Loading variants...</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Staff Tab -->
-      <div id="admin-tab-staff" class="card-table" style="display: none;">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Staff Member</th>
-              <th>Email Address</th>
-              <th>Phone</th>
-              <th>Role</th>
-            </tr>
-          </thead>
-          <tbody id="admin-staff-table">
-            <tr><td colspan="5" style="text-align: center;">Loading staff members...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- 2. STAFF OPERATIONS PORTAL                 -->
-    <!-- ========================================== -->
-    <section id="staff-view" class="view-section">
-      <div class="toolbar">
-        <div>
-          <h2 style="font-size: 1.4rem; font-weight: 800;">Staff Operations Inbox</h2>
-          <p style="font-size: 0.85rem; color: var(--text-muted);">Manage customer subscriptions, chase overdue renewals, and run automated billing.</p>
-        </div>
-        <div style="display: flex; gap: 8px;">
-          <button class="btn btn-primary" onclick="triggerRunBilling()">⚡ Run Automated Batch Billing</button>
-          <button class="btn btn-outline" onclick="loadStaffSubscriptions(true)">🚨 Expiring / Overdue Only</button>
-          <button class="btn btn-outline" onclick="loadStaffSubscriptions(false)">🔄 Show All</button>
-        </div>
-      </div>
-
-      <!-- Billing Run Live Alert Banner -->
-      <div id="billing-banner" style="display: none; background: #ecfdf5; border: 1px solid #10b981; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 0.85rem; color: #065f46;">
-      </div>
-
-      <!-- Category Filter Pills -->
-      <div class="pills">
-        <button class="pill active" onclick="filterCategory('All')">All Categories</button>
-        <button class="pill" onclick="filterCategory('Retail')">🛒 Retail</button>
-        <button class="pill" onclick="filterCategory('Healthcare')">🏥 Healthcare</button>
-        <button class="pill" onclick="filterCategory('Finance')">📊 Finance</button>
-        <button class="pill" onclick="filterCategory('Tech')">💻 Tech</button>
-        <button class="pill" onclick="filterCategory('Testing')">⚡ Testing</button>
-      </div>
-
-      <!-- Search Toolbar -->
-      <div class="toolbar">
-        <input type="text" id="staff-search" class="search-box" placeholder="Search customer, subscription #, or company..." onkeyup="handleStaffSearch()">
-        <span id="staff-sub-count" style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Showing 0 subscriptions</span>
-      </div>
-
-      <!-- Email/Inbox Style Table -->
-      <div class="card-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Sub #</th>
-              <th>Customer</th>
-              <th>Company</th>
-              <th>Category</th>
-              <th>Plan & Variant</th>
-              <th>Qty</th>
-              <th>Total (Tax Incl)</th>
-              <th>Expiry Date</th>
-              <th>Status</th>
-              <th>Staff Actions</th>
-            </tr>
-          </thead>
-          <tbody id="staff-subscriptions-table">
-            <tr><td colspan="10" style="text-align: center;">Loading subscriptions...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- 3. CUSTOMER PORTAL                         -->
-    <!-- ========================================== -->
-    <section id="customer-view" class="view-section">
-      <div class="toolbar">
-        <div>
-          <h2 style="font-size: 1.4rem; font-weight: 800;">Customer Self-Service Store</h2>
-          <p style="font-size: 0.85rem; color: var(--text-muted);">Explore plans, select custom variants, subscribe, and view invoice receipts.</p>
-        </div>
-      </div>
-
-      <!-- Plan Cards Grid -->
-      <div class="kpi-grid" id="customer-plans-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
-      </div>
-
-      <!-- Customer Invoices History -->
-      <h3 style="font-size: 1.1rem; font-weight: 700; margin: 28px 0 12px 0;">My Invoice Receipts History</h3>
-      <div class="card-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Invoice #</th>
-              <th>Date</th>
-              <th>Subscription #</th>
-              <th>Billed Amount</th>
-              <th>Tax (18% GST)</th>
-              <th>Status</th>
-              <th>Receipt</th>
-            </tr>
-          </thead>
-          <tbody id="customer-invoices-table">
-            <tr><td colspan="7" style="text-align: center;">Loading invoices...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ================= AUTH MODALS ================= -->
-
-  <!-- Sign In Modal -->
-  <div id="login-modal" class="modal">
-    <div class="modal-content">
-      <h3 style="margin-bottom: 6px;">Sign In to Brightloop</h3>
-      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px;">Access your role-specific portal.</p>
+  <!-- ======================================================== -->
+  <!-- 1. GOOGLE SIGN IN LANDING PAGE GATEWAY                   -->
+  <!-- ======================================================== -->
+  <div id="landing-auth-gate" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px;">
+    <div class="card" style="max-width: 480px; width: 100%; padding: 36px; box-shadow: var(--shadow-lg); text-align: center;">
       
-      <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" id="login-email" class="form-control" placeholder="admin@brightloop.local">
+      <!-- Brand Logo & Header -->
+      <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 8px;">
+        <span style="font-size: 1.8rem;">⚡</span>
+        <span style="font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--text-primary);">Brightloop</span>
+        <span class="logo-badge">Enterprise</span>
       </div>
-      <div class="form-group">
-        <div style="display: flex; justify-content: space-between;">
-          <label>Password</label>
-          <a href="javascript:void(0)" onclick="openForgotPassword()" style="font-size: 0.75rem; color: var(--primary);">Forgot Password?</a>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 24px;">
+        Unified Recurring Billing, Variant Quotations & Executive Reconciliation
+      </p>
+
+      <!-- Primary Google Sign-In Button -->
+      <button class="btn-google" onclick="triggerGoogleSignIn()">
+        <svg width="20" height="20" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.27-2.09 3.66-5.17 3.66-9.12z"/>
+          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.27v3.13C3.25 21.35 7.33 24 12 24z"/>
+          <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.58H1.27C.46 8.2 0 10.04 0 12s.46 3.8 1.27 5.42l4.01-3.13z"/>
+          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.25 2.65 1.27 6.58l4.01 3.13c.95-2.83 3.6-4.96 6.72-4.96z"/>
+        </svg>
+        <span>Continue with Google</span>
+      </button>
+
+      <div style="display: flex; align-items: center; gap: 12px; margin: 24px 0;">
+        <div style="flex: 1; height: 1px; background: var(--border-color);"></div>
+        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Or 1-Click Role Login</span>
+        <div style="flex: 1; height: 1px; background: var(--border-color);"></div>
+      </div>
+
+      <!-- 1-Click Demo Personas -->
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px;">
+        <button class="btn btn-secondary" style="justify-content: flex-start; text-align: left; padding: 10px 16px;" onclick="personaLogin('admin')">
+          <span style="font-size: 1.2rem;">👑</span>
+          <div style="margin-left: 6px;">
+            <div style="font-weight: 700; font-size: 0.88rem;">Bhavya Mehta (Admin)</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">admin@brightloop.local • Full Governance & Refunds</div>
+          </div>
+        </button>
+
+        <button class="btn btn-secondary" style="justify-content: flex-start; text-align: left; padding: 10px 16px;" onclick="personaLogin('staff')">
+          <span style="font-size: 1.2rem;">📋</span>
+          <div style="margin-left: 6px;">
+            <div style="font-weight: 700; font-size: 0.88rem;">Operations Staff Rep</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">staff@brightloop.local • CRM Spreadsheet & Reminders</div>
+          </div>
+        </button>
+
+        <button class="btn btn-secondary" style="justify-content: flex-start; text-align: left; padding: 10px 16px;" onclick="personaLogin('customer')">
+          <span style="font-size: 1.2rem;">👤</span>
+          <div style="margin-left: 6px;">
+            <div style="font-weight: 700; font-size: 0.88rem;">Meera Bhat (Enterprise Customer)</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">meera.bhat1@sterlingca.com • Portfolio & PDF Receipts</div>
+          </div>
+        </button>
+      </div>
+
+      <!-- Manual Email Login / Register Toggle -->
+      <div style="border-top: 1px solid var(--border-color); padding-top: 18px; font-size: 0.8rem; color: var(--text-secondary);">
+        Need custom credentials? 
+        <a href="javascript:void(0)" onclick="openModal('register-modal')" style="color: var(--primary); font-weight: 600;">Create Account</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 2. MAIN APPLICATION (POST-AUTHENTICATION MOGG SHELL)      -->
+  <!-- ======================================================== -->
+  <div id="main-app-shell" style="display: none;">
+
+    <!-- Top Sticky Header -->
+    <header>
+      <div class="logo" onclick="switchSidebarTab('home')">
+        <span style="font-size: 1.6rem;">⚡</span>
+        <span style="font-family: 'Outfit', sans-serif;">Brightloop</span>
+        <span class="logo-badge" id="app-role-badge">ADMIN</span>
+      </div>
+
+      <div class="top-actions">
+        <!-- Local DB Engine Indicator -->
+        <div style="font-size: 0.78rem; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
+          <span style="color: var(--success); font-weight: bold;">●</span> Local SQLite DB (~17ms)
         </div>
-        <input type="password" id="login-password" class="form-control" placeholder="••••••••">
-      </div>
 
-      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px;">
-        <button class="btn btn-outline" onclick="closeModal('login-modal')">Cancel</button>
-        <button class="btn btn-primary" onclick="submitLogin()">Sign In</button>
-      </div>
-
-      <!-- Quick Demo Login Buttons for Evaluators -->
-      <div class="demo-btn-group">
-        <span style="font-size: 0.7rem; color: var(--text-muted); width: 100%;">⚡ 1-Click Evaluator Demo Logins:</span>
-        <button class="btn btn-outline btn-sm" onclick="quickLogin('admin@brightloop.local')">👑 Admin</button>
-        <button class="btn btn-outline btn-sm" onclick="quickLogin('staff@brightloop.local')">📋 Staff</button>
-        <button class="btn btn-outline btn-sm" onclick="quickLogin('aarav.sharma1@apollocare.com')">👤 Customer</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Sign Up Modal (with Strict Password Checklist) -->
-  <div id="register-modal" class="modal">
-    <div class="modal-content">
-      <h3 style="margin-bottom: 6px;">Create a Customer Account</h3>
-      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px;">Sign up to subscribe and manage recurring plans.</p>
-
-      <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" id="reg-name" class="form-control" placeholder="e.g. Ramesh Patel">
-      </div>
-      <div class="form-group">
-        <label>Business Email (Unique)</label>
-        <input type="email" id="reg-email" class="form-control" placeholder="ramesh@mybusiness.com">
-      </div>
-      <div class="form-group">
-        <label>Company Name</label>
-        <input type="text" id="reg-company" class="form-control" placeholder="Apex Retail Pvt Ltd">
-      </div>
-      <div class="form-group">
-        <label>Password (Strict Rule Verification)</label>
-        <input type="password" id="reg-password" class="form-control" placeholder="Create secure password" oninput="checkPasswordLive(this.value)">
-        <div class="pwd-check">
-          <span id="pwd-len" class="pwd-item">✕ Greater than 8 characters</span>
-          <span id="pwd-upper" class="pwd-item">✕ At least one uppercase letter (A-Z)</span>
-          <span id="pwd-lower" class="pwd-item">✕ At least one lowercase letter (a-z)</span>
-          <span id="pwd-special" class="pwd-item">✕ At least one special character (!@#$%^&*)</span>
+        <!-- User Profile Pill -->
+        <div class="user-pill">
+          <div class="user-avatar" id="header-avatar">B</div>
+          <div style="display: flex; flex-direction: column;">
+            <span id="header-user-name" style="font-weight: 700; font-size: 0.85rem;">Bhavya Admin</span>
+            <span id="header-user-email" style="font-size: 0.72rem; color: var(--text-muted);">admin@brightloop.local</span>
+          </div>
         </div>
+
+        <!-- Logout Button -->
+        <button class="btn btn-secondary btn-sm" onclick="logout()">Sign Out</button>
+      </div>
+    </header>
+
+    <div class="app-container">
+
+      <!-- ================= SIDEBAR NAVIGATION ================= -->
+      <aside class="sidebar" id="app-sidebar">
+        <!-- Rendered dynamically based on Role in app.js -->
+      </aside>
+
+      <!-- ================= MAIN CONTENT VIEWS ================= -->
+      <main class="main-content">
+
+        <!-- =================================================== -->
+        <!-- VIEW 1: ADMIN - EXECUTIVE DASHBOARD & GOVERNANCE    -->
+        <!-- =================================================== -->
+        <div id="admin-view" class="view-panel">
+          <div class="section-header">
+            <div>
+              <h1 class="section-title">👑 Admin Executive Governance</h1>
+              <p class="section-subtitle">Real-time metrics, plan governance, subscription disallowance & automated refunds.</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-secondary btn-sm" onclick="loadAdminMetrics()">🔄 Refresh KPIs</button>
+              <button class="btn btn-sm" onclick="openModal('add-plan-modal')">+ Create Plan</button>
+              <button class="btn btn-sm" onclick="openModal('add-variant-modal')">+ Add Variant (+₹560)</button>
+              <button class="btn btn-secondary btn-sm" onclick="openModal('add-staff-modal')">+ Add Staff</button>
+            </div>
+          </div>
+
+          <!-- KPI Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-label">Monthly Recurring Revenue</div>
+              <div class="kpi-value" id="kpi-mrr">₹0.00</div>
+              <div class="kpi-sub" style="color: var(--success);">⚡ Auto-normalized across 4 cycles</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Annual Run Rate (ARR)</div>
+              <div class="kpi-value" id="kpi-arr">₹0.00</div>
+              <div class="kpi-sub" style="color: var(--primary);">📈 12x Projected ARR</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Cash Collected</div>
+              <div class="kpi-value" id="kpi-cash">₹0.00</div>
+              <div class="kpi-sub" style="color: var(--success);">✓ Reconciled B2B payments</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Overdue Debt</div>
+              <div class="kpi-value" id="kpi-overdue" style="color: var(--danger);">₹0.00</div>
+              <div class="kpi-sub" style="color: var(--danger);">⚠️ Needs staff collection</div>
+            </div>
+          </div>
+
+          <!-- Real-Time Disallow & Auto-Refund Table -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">⚡ Organization Subscriptions (Real-Time Disallow & Instant Refund)</div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">Deleting a subscription marks it cancelled and issues a 100% automatic refund</span>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Sub #</th>
+                    <th>Customer</th>
+                    <th>Plan & Variant</th>
+                    <th>Qty</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-subscriptions-table">
+                  <!-- Filled by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Plans Catalog Governance -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📦 Active Plans & Variants Catalog</div>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Plan Name</th>
+                    <th>Category</th>
+                    <th>Billing Frequency</th>
+                    <th>Base Price</th>
+                    <th>Pausable</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-plans-table">
+                  <!-- Filled by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Executive System Audit Report -->
+          <div class="card" style="background: #f8fafc;">
+            <div class="card-header">
+              <div class="card-title">🛡️ System Integrity & Audit Report</div>
+              <button class="btn btn-secondary btn-sm" onclick="loadAuditReport()">Run Audit</button>
+            </div>
+            <div id="admin-audit-content" style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+              Click 'Run Audit' to verify organization metrics and database integrity.
+            </div>
+          </div>
+
+        </div>
+
+        <!-- =================================================== -->
+        <!-- VIEW 2: STAFF - SMART WORKSPACE & SPREADSHEET CRM   -->
+        <!-- =================================================== -->
+        <div id="staff-view" class="view-panel">
+          <div class="section-header">
+            <div>
+              <h1 class="section-title">📋 Staff Operations Workspace</h1>
+              <p class="section-subtitle">Customer CRM, spreadsheet exports, payment delay notifications & batch billing.</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-secondary btn-sm" onclick="downloadCustomerSpreadsheet()">📥 Download Customer Spreadsheet (.csv)</button>
+              <button class="btn btn-sm" onclick="openModal('add-customer-modal')">+ Add Customer</button>
+              <button class="btn btn-sm" onclick="triggerStaffBatchBilling()" style="background: #059669; border-color: #059669;">⚡ Run Automated Billing</button>
+            </div>
+          </div>
+
+          <!-- Billing Alert Banner -->
+          <div id="staff-billing-banner" style="display: none; background: #ecfdf5; border: 1px solid #10b981; border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; font-size: 0.88rem; color: #065f46;">
+          </div>
+
+          <!-- Customer CRM Spreadsheet Center -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">👥 Customer CRM Center (Clean View - Replaces Messy Spreadsheets)</div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">Organized customer portfolio with 1-click CSV download</span>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Customer Name</th>
+                    <th>Company</th>
+                    <th>Email</th>
+                    <th>Industry</th>
+                    <th>Subscriptions</th>
+                    <th>Active Plans</th>
+                    <th>Total Spend</th>
+                    <th>Account Health</th>
+                  </tr>
+                </thead>
+                <tbody id="staff-customers-table">
+                  <!-- Filled by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Subscription Queue & Notifications -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📨 Subscription Lifecycle Queue & Chase Alerts</div>
+              <div class="filter-tabs" style="margin-bottom: 0;">
+                <button class="filter-tab active" onclick="filterStaffSubs('All')">All</button>
+                <button class="filter-tab" onclick="filterStaffSubs('Retail')">Retail</button>
+                <button class="filter-tab" onclick="filterStaffSubs('Healthcare')">Healthcare</button>
+                <button class="filter-tab" onclick="filterStaffSubs('Finance')">Finance</button>
+                <button class="filter-tab" onclick="filterStaffSubs('Tech')">Tech</button>
+                <button class="filter-tab" style="color: var(--danger);" onclick="filterStaffSubs('Expiring')">⚠️ Expiring/Overdue Only</button>
+              </div>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Sub #</th>
+                    <th>Customer</th>
+                    <th>Plan & Frequency</th>
+                    <th>Unit Price</th>
+                    <th>Status</th>
+                    <th>Expiry Date</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="staff-subscriptions-table">
+                  <!-- Filled by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Pending Invoices & Payment Delay Notices -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🔔 Overdue Invoices & Delay Notice Dispatch</div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">1-click payment delay notices sent directly to customer contact</span>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Invoice #</th>
+                    <th>Sub #</th>
+                    <th>Customer</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="staff-invoices-table">
+                  <!-- Filled by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- =================================================== -->
+        <!-- VIEW 3: CUSTOMER - PROFILE, PORTFOLIO & PDF RECIEPTS -->
+        <!-- =================================================== -->
+        <div id="customer-view" class="view-panel">
+          <div class="section-header">
+            <div>
+              <h1 class="section-title">👤 Customer Dashboard & Portfolio</h1>
+              <p class="section-subtitle">Investment summary, active subscriptions & printable official tax receipts.</p>
+            </div>
+            <button class="btn btn-sm" onclick="switchSidebarTab('catalog')">🛍️ Browse Subscription Plans</button>
+          </div>
+
+          <!-- Customer Investment KPI Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-label">Total Amount Invested</div>
+              <div class="kpi-value" id="cust-total-invested">₹0.00</div>
+              <div class="kpi-sub" style="color: var(--success);">✓ Fully Paid & Reconciled</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Active Subscriptions</div>
+              <div class="kpi-value" id="cust-active-subs">0</div>
+              <div class="kpi-sub" style="color: var(--primary);">⚡ Live Services</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Pending / Overdue Invoices</div>
+              <div class="kpi-value" id="cust-overdue-debt" style="color: var(--warning);">₹0.00</div>
+              <div class="kpi-sub">Due for clearance</div>
+            </div>
+          </div>
+
+          <!-- My Subscriptions -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📑 My Subscriptions</div>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Sub #</th>
+                    <th>Plan Name</th>
+                    <th>Variant</th>
+                    <th>Qty</th>
+                    <th>Cost</th>
+                    <th>Status</th>
+                    <th>Valid Till</th>
+                  </tr>
+                </thead>
+                <tbody id="customer-subscriptions-table">
+                  <!-- Filled by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- My Invoices & Printable PDF Receipts -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🧾 Generated Invoices & Official PDF Receipts</div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">Click 'View PDF' to generate and print your tax invoice</span>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Invoice #</th>
+                    <th>Subscription #</th>
+                    <th>Amount</th>
+                    <th>Tax (18% GST)</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="customer-invoices-table">
+                  <!-- Filled by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Subscription Plan Catalog (Direct Purchase) -->
+          <div class="card" id="customer-plan-catalog-card">
+            <div class="card-header">
+              <div class="card-title">🛍️ Available Subscription Plans (Real-Time Admin Sync)</div>
+            </div>
+            <div class="kpi-grid" id="customer-plans-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+        </div>
+
+      </main>
+
+    </div>
+
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 3. INTERACTIVE MODALS                                     -->
+  <!-- ======================================================== -->
+
+  <!-- Printable PDF Invoice Modal -->
+  <div id="pdf-invoice-modal" class="modal">
+    <div class="modal-content" style="max-width: 680px;">
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 14px;">
+        <button class="btn btn-sm" onclick="window.print()">🖨️ Print / Save as PDF</button>
+        <button class="btn btn-secondary btn-sm" onclick="closeModal('pdf-invoice-modal')">✕ Close</button>
       </div>
 
-      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px;">
-        <button class="btn btn-outline" onclick="closeModal('register-modal')">Cancel</button>
-        <button class="btn btn-primary" onclick="submitRegister()">Create Account</button>
+      <div class="invoice-print-container" id="printable-invoice-content">
+        <!-- Rendered dynamically by JS -->
       </div>
     </div>
   </div>
 
-  <!-- Forgot Password Modal -->
-  <div id="forgot-modal" class="modal">
-    <div class="modal-content">
-      <h3 style="margin-bottom: 6px;">Reset Your Password</h3>
-      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px;">A secure reset link will be dispatched to your registered email.</p>
-      <div class="form-group">
-        <label>Registered Email</label>
-        <input type="email" id="forgot-email" class="form-control" placeholder="your-email@company.com">
-      </div>
-      <div id="forgot-result" style="display: none; background: #ecfdf5; border: 1px solid #10b981; padding: 10px; border-radius: 6px; font-size: 0.8rem; color: #065f46; margin-top: 10px;">
-      </div>
-      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px;">
-        <button class="btn btn-outline" onclick="closeModal('forgot-modal')">Close</button>
-        <button class="btn btn-primary" onclick="submitForgotPassword()">Send Reset Link</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Plan & Staff Creation Modals -->
+  <!-- Add Plan Modal -->
   <div id="add-plan-modal" class="modal">
     <div class="modal-content">
-      <h3 style="margin-bottom: 16px;">Create New Subscription Plan</h3>
+      <h3 style="margin-bottom: 12px;">Create New Subscription Plan</h3>
       <div class="form-group">
         <label>Plan Name</label>
-        <input type="text" id="new-plan-name" class="form-control" placeholder="e.g. Healthcare Pro">
+        <input id="plan-name" placeholder="e.g. Enterprise Cloud Suite">
       </div>
       <div class="form-group">
         <label>Category</label>
-        <select id="new-plan-category" class="form-control">
+        <select id="plan-category">
           <option value="Retail">Retail</option>
           <option value="Healthcare">Healthcare</option>
           <option value="Finance">Finance</option>
           <option value="Tech">Tech</option>
-          <option value="Testing">Testing</option>
         </select>
       </div>
       <div class="form-group">
         <label>Billing Period</label>
-        <select id="new-plan-period" class="form-control">
+        <select id="plan-period">
           <option value="monthly">Monthly</option>
           <option value="yearly">Yearly</option>
           <option value="weekly">Weekly</option>
@@ -405,34 +478,121 @@
         </select>
       </div>
       <div class="form-group">
-        <label>Price (₹)</label>
-        <input type="number" id="new-plan-price" class="form-control" placeholder="4999.00">
+        <label>Base Price (INR)</label>
+        <input type="number" id="plan-price" placeholder="4999.00">
       </div>
-      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px;">
-        <button class="btn btn-outline" onclick="closeModal('add-plan-modal')">Cancel</button>
-        <button class="btn btn-primary" onclick="submitCreatePlan()">Save Plan</button>
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px;">
+        <button class="btn btn-secondary" onclick="closeModal('add-plan-modal')">Cancel</button>
+        <button class="btn" onclick="submitCreatePlan()">Save Plan</button>
       </div>
     </div>
   </div>
 
-  <div id="add-staff-modal" class="modal">
+  <!-- Add Variant Modal (+₹560 Odoo Brand Delta) -->
+  <div id="add-variant-modal" class="modal">
     <div class="modal-content">
-      <h3 style="margin-bottom: 16px;">Onboard New Staff Member</h3>
+      <h3 style="margin-bottom: 12px;">Configure Product Variant & Price Delta</h3>
       <div class="form-group">
-        <label>Staff Full Name</label>
-        <input type="text" id="new-staff-name" class="form-control" placeholder="e.g. John Doe">
+        <label>Product Name</label>
+        <input id="var-prod-name" value="Brightloop Core System">
       </div>
       <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" id="new-staff-email" class="form-control" placeholder="john@brightloop.local">
+        <label>Variant Name</label>
+        <input id="var-name" placeholder="e.g. Odoo Brand Integration">
+      </div>
+      <div class="form-group">
+        <label>Extra Price Delta (INR)</label>
+        <input type="number" id="var-price" value="560.00" placeholder="560.00">
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px;">
+        <button class="btn btn-secondary" onclick="closeModal('add-variant-modal')">Cancel</button>
+        <button class="btn" onclick="submitCreateVariant()">Add Variant</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Staff Modal -->
+  <div id="add-staff-modal" class="modal">
+    <div class="modal-content">
+      <h3 style="margin-bottom: 12px;">👑 Onboard New Operations Staff</h3>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px;">Only Admin has the authorization to invite new staff members.</p>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input id="staff-name" placeholder="e.g. Ramesh Kumar">
+      </div>
+      <div class="form-group">
+        <label>Staff Email</label>
+        <input id="staff-email" placeholder="ramesh@brightloop.local">
       </div>
       <div class="form-group">
         <label>Phone Number</label>
-        <input type="text" id="new-staff-phone" class="form-control" placeholder="+91 98765 43210">
+        <input id="staff-phone" placeholder="+91 98765 43210">
       </div>
-      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px;">
-        <button class="btn btn-outline" onclick="closeModal('add-staff-modal')">Cancel</button>
-        <button class="btn btn-primary" onclick="submitCreateStaff()">Add Staff</button>
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px;">
+        <button class="btn btn-secondary" onclick="closeModal('add-staff-modal')">Cancel</button>
+        <button class="btn" onclick="submitCreateStaff()">Onboard Staff</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Customer Modal -->
+  <div id="add-customer-modal" class="modal">
+    <div class="modal-content">
+      <h3 style="margin-bottom: 12px;">📋 Onboard Customer (CRM)</h3>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input id="new-cust-name" placeholder="e.g. Ananya Rao">
+      </div>
+      <div class="form-group">
+        <label>Company Name</label>
+        <input id="new-cust-company" placeholder="e.g. Horizon Logistics">
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input id="new-cust-email" placeholder="ananya@horizonlogistics.in">
+      </div>
+      <div class="form-group">
+        <label>Industry</label>
+        <select id="new-cust-industry">
+          <option value="Retail">Retail</option>
+          <option value="Healthcare">Healthcare</option>
+          <option value="Finance">Finance</option>
+          <option value="Tech">Tech</option>
+        </select>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px;">
+        <button class="btn btn-secondary" onclick="closeModal('add-customer-modal')">Cancel</button>
+        <button class="btn" onclick="submitCreateCustomer()">Save Customer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Account / Register Modal with Scene 1 Password Rules -->
+  <div id="register-modal" class="modal">
+    <div class="modal-content">
+      <h3 style="margin-bottom: 8px;">Create Enterprise Account</h3>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px;">Strict Scene 1 compliance password validation rules apply.</p>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input id="reg-name" placeholder="e.g. Vikram Seth">
+      </div>
+      <div class="form-group">
+        <label>Work Email</label>
+        <input id="reg-email" placeholder="vikram@enterprise.com">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="reg-password" oninput="checkPasswordRules(this.value)">
+        <div style="font-size: 0.75rem; color: #64748b; margin-top: 6px; display: flex; flex-direction: column; gap: 2px;">
+          <span id="pwd-len" style="color: #ef4444;">✕ Greater than 8 characters</span>
+          <span id="pwd-upper" style="color: #ef4444;">✕ At least one uppercase letter (A-Z)</span>
+          <span id="pwd-lower" style="color: #ef4444;">✕ At least one lowercase letter (a-z)</span>
+          <span id="pwd-spec" style="color: #ef4444;">✕ At least one special character (!@#$%...)</span>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px;">
+        <button class="btn btn-secondary" onclick="closeModal('register-modal')">Cancel</button>
+        <button class="btn" onclick="submitRegister()">Register</button>
       </div>
     </div>
   </div>

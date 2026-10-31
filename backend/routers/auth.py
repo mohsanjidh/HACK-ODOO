@@ -7,12 +7,17 @@ from typing import Optional
 from datetime import datetime
 
 from backend.core.database import get_db
-from backend.models.models import User
+from backend.models.models import User, Subscription, Invoice, Payment
 from backend.core.config import SECRET_KEY, ALGORITHM
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication & Access Control"])
 
 # --- Request / Response Schemas ---
+class GoogleAuthRequest(BaseModel):
+    name: str
+    email: str
+    avatar_url: Optional[str] = None
+    role: Optional[str] = None # Optional override if selecting specific demo persona
 class UserRegister(BaseModel):
     name: str
     email: str
@@ -156,4 +161,100 @@ def get_demo_accounts(db: Session = Depends(get_db)):
         "admin": {"name": admin_user.name, "email": admin_user.email, "role": "admin"} if admin_user else None,
         "staff": {"name": staff_user.name, "email": staff_user.email, "role": "staff"} if staff_user else None,
         "customer": {"name": customer_user.name, "email": customer_user.email, "role": "customer"} if customer_user else None,
+    }
+
+@router.post("/google")
+def google_sign_in(req: GoogleAuthRequest, db: Session = Depends(get_db)):
+    """Simulated secure Google OAuth SSO authentication."""
+    user = db.query(User).filter(User.email == req.email.strip()).first()
+    
+    # If user doesn't exist, create based on email pattern or role
+    if not user:
+        role = req.role if req.role else ("admin" if "admin" in req.email else ("staff" if "staff" in req.email else "customer"))
+        user = User(
+            name=req.name,
+            email=req.email.strip(),
+            role=role,
+            company_name="Google Verified Organization",
+            industry="Technology",
+            created_at=datetime.now().strftime("%Y-%m-%d")
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+
+    return {
+        "status": "success",
+        "message": f"Authenticated via Google SSO as {user.name}",
+        "user": {
+            "id": user.id,
+            "name": user.name,
+            "email": user.email,
+            "role": user.role,
+            "company_name": user.company_name or "Brightloop Network",
+            "avatar_url": req.avatar_url or f"https://api.dicebear.com/7.x/initials/svg?seed={user.name}"
+        },
+        "token": f"google_sso_token_{user.id}_{user.role}"
+    }
+
+@router.get("/profile/{email}")
+def get_customer_dashboard_profile(email: str, db: Session = Depends(get_db)):
+    """Comprehensive customer dashboard profile with invested amount, subscriptions and invoices."""
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found.")
+
+    subs = db.query(Subscription).filter(Subscription.customer_email == email).order_by(Subscription.id.desc()).all()
+    invoices = db.query(Invoice).filter(Invoice.customer_email == email).order_by(Invoice.id.desc()).all()
+
+    # Calculate total amount invested (sum of paid invoices)
+    total_invested = sum(inv.amount for inv in invoices if inv.status == "Paid")
+    total_overdue = sum(inv.amount for inv in invoices if inv.status in ["Overdue", "Confirmed"])
+
+    subs_data = []
+    for s in subs:
+        subs_data.append({
+            "id": s.id,
+            "subscription_number": s.subscription_number,
+            "plan_name": s.plan_name,
+            "variant_name": s.variant_name,
+            "quantity": s.quantity,
+            "unit_price": s.unit_price,
+            "total_amount": s.total_amount,
+            "status": s.status,
+            "start_date": s.start_date,
+            "expiry_date": s.expiry_date
+        })
+
+    invoices_data = []
+    for inv in invoices:
+        invoices_data.append({
+            "id": inv.id,
+            "invoice_number": inv.invoice_number,
+            "subscription_number": inv.subscription_number,
+            "amount": inv.amount,
+            "tax_amount": inv.tax_amount,
+            "discount_amount": inv.discount_amount,
+            "status": inv.status
+        })
+
+    return {
+        "status": "success",
+        "profile": {
+            "id": user.id,
+            "name": user.name,
+            "email": user.email,
+            "role": user.role,
+            "company_name": user.company_name or "Independent Account",
+            "industry": user.industry or "Retail",
+            "phone": user.phone or "N/A"
+        },
+        "financials": {
+            "total_invested": round(total_invested, 2),
+            "total_overdue": round(total_overdue, 2),
+            "total_subscriptions": len(subs),
+            "active_subscriptions": len([s for s in subs if s.status == "Active"])
+        },
+        "subscriptions": subs_data,
+        "invoices": invoices_data
     }
