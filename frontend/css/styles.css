@@ -133,6 +133,26 @@ header {
   flex-direction: column;
   gap: 6px;
   flex-shrink: 0;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), padding 0.25s ease;
+}
+
+.sidebar.collapsed {
+  width: 76px;
+  padding: 24px 10px;
+}
+
+.sidebar.collapsed .sidebar-title {
+  display: none;
+}
+
+.sidebar.collapsed .sidebar-item span:not(.icon) {
+  display: none;
+}
+
+.sidebar.collapsed .sidebar-item {
+  justify-content: center;
+  padding: 12px 0;
+  border-radius: 14px;
 }
 
 .sidebar-title {
@@ -589,16 +609,83 @@ tr:hover td {
 }
 
 @media print {
-  header, .sidebar, .btn, .modal-close {
+  /* Hide all app chrome, headers, navigation, buttons, and backdrop */
+  header, #landing-auth-gate, .sidebar, .btn, .modal-close, .top-actions, .filter-tabs, #sidebar-toggle-btn {
     display: none !important;
   }
-  body, .app-container, .main-content, .modal, .modal-content {
-    background: transparent !important;
+  
+  /* Hide regular main-content if a printable modal is active */
+  body.modal-open .app-container,
+  body.modal-open .main-content,
+  body.modal-open #admin-view,
+  body.modal-open #staff-view,
+  body.modal-open #customer-view {
+    display: none !important;
+  }
+  
+  /* Hide non-active modals and non-printable form modals */
+  .modal:not(.active),
+  #add-plan-modal,
+  #add-variant-modal,
+  #onboard-staff-modal,
+  #add-customer-modal,
+  #register-modal,
+  #plan-analytics-modal {
+    display: none !important;
+  }
+  
+  /* Make the active report or invoice modal the ONLY visible element, filling page cleanly */
+  #executive-report-modal.active,
+  #pdf-invoice-modal.active {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    background: #ffffff !important;
     padding: 0 !important;
     margin: 0 !important;
     box-shadow: none !important;
+  }
+
+  #executive-report-modal.active .modal-content,
+  #pdf-invoice-modal.active .modal-content {
+    max-width: 100% !important;
+    width: 100% !important;
     border: none !important;
-    display: block !important;
-    position: static !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 11pt !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    page-break-inside: auto;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  th, td {
+    border-bottom: 1px solid #e2e8f0 !important;
+    padding: 8px 10px !important;
+    color: #0f172a !important;
+    font-size: 10pt !important;
+  }
+
+  .badge {
+    border: 1px solid #cbd5e1 !important;
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
   }
 }

@@ -108,8 +108,14 @@ function logout() {
 }
 
 // ----------------------------------------------------------
-// 2. MOGG FLOATING SIDEBAR NAVIGATION
+// 2. MOGG FLOATING SIDEBAR NAVIGATION & COLLAPSE
 // ----------------------------------------------------------
+
+function toggleSidebarCollapse() {
+  const sidebar = document.getElementById("app-sidebar");
+  if (!sidebar) return;
+  sidebar.classList.toggle("collapsed");
+}
 
 function renderSidebar(role) {
   const sidebar = document.getElementById("app-sidebar");
@@ -118,30 +124,29 @@ function renderSidebar(role) {
   if (role === "admin") {
     html = `
       <div class="sidebar-title">Executive Governance</div>
-      <div class="sidebar-item active" id="side-admin-dash" onclick="switchSidebarTab('admin-view')">
-        <span class="icon">👑</span>
-        <span>Dashboard & Graph</span>
+      <div class="sidebar-item active" id="side-admin-dash" title="Dashboard & Capital" onclick="switchSidebarTab('admin-view')">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+        </span>
+        <span>Dashboard & Capital</span>
       </div>
-      <div class="sidebar-item" id="side-admin-create" onclick="switchSidebarTab('admin-create-plan-view')">
-        <span class="icon">➕</span>
+      <div class="sidebar-item" id="side-admin-create" title="Set Up New Plan" onclick="switchSidebarTab('admin-create-plan-view')">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+        </span>
         <span>Set Up New Plan</span>
       </div>
-      <div class="sidebar-item" id="side-admin-manage" onclick="switchSidebarTab('admin-manage-plans-view')">
-        <span class="icon">📦</span>
-        <span>Manage Plans & Variants</span>
+      <div class="sidebar-item" id="side-admin-manage" title="Manage Plans & Limits" onclick="switchSidebarTab('admin-manage-plans-view')">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+        </span>
+        <span>Manage Plans & Limits</span>
       </div>
-      <div class="sidebar-item" id="side-admin-staff" onclick="switchSidebarTab('admin-staff-view')">
-        <span class="icon">💼</span>
+      <div class="sidebar-item" id="side-admin-staff" title="Staff & Commissions" onclick="switchSidebarTab('admin-staff-view')">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </span>
         <span>Staff & Commissions</span>
-      </div>
-      <div class="sidebar-title">Portals Switcher</div>
-      <div class="sidebar-item" onclick="switchSidebarTab('staff-view'); loadStaffCustomers(); loadStaffSubscriptions(); loadStaffInvoices();">
-        <span class="icon">📋</span>
-        <span>Staff Operations Desk</span>
-      </div>
-      <div class="sidebar-item" onclick="switchSidebarTab('customer-view'); loadCustomerProfile(); loadCustomerPlans();">
-        <span class="icon">👤</span>
-        <span>Customer Portal View</span>
       </div>
     `;
   } else if (role === "staff") {
@@ -211,13 +216,13 @@ function switchSidebarTab(tabName) {
     const el = document.getElementById("side-admin-create");
     if (el) el.classList.add("active");
     populateStaffSelectForNewPlan();
+    updateLivePlanPreview();
   } else if (tabName === "admin-manage-plans-view" || tabName === "admin-manage") {
     document.getElementById("admin-manage-plans-view").classList.add("active");
     const el = document.getElementById("side-admin-manage");
     if (el) el.classList.add("active");
     loadAdminManagePlans();
     loadAdminVariantsTable();
-    loadAdminSubscriptions();
   } else if (tabName === "admin-staff-view" || tabName === "admin-staff") {
     document.getElementById("admin-staff-view").classList.add("active");
     const el = document.getElementById("side-admin-staff");
@@ -225,6 +230,10 @@ function switchSidebarTab(tabName) {
     loadStaffCommissions();
   } else if (tabName.startsWith("staff")) {
     document.getElementById("staff-view").classList.add("active");
+    loadStaffCustomers();
+    loadStaffSubscriptions();
+    loadStaffInvoices();
+    loadStaffRefundSubscriptions();
   } else {
     document.getElementById("customer-view").classList.add("active");
   }
@@ -345,6 +354,7 @@ async function renderAllTimeInvestmentsGraph() {
 
 async function loadAdminSubscriptions() {
   const tbody = document.getElementById("admin-subscriptions-table");
+  if (!tbody) return;
   tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Loading subscriptions...</td></tr>`;
 
   try {
@@ -373,7 +383,7 @@ async function loadAdminSubscriptions() {
         <td>
           ${s.status !== "Cancelled" && s.status !== "Closed" ? `
             <button class="btn btn-danger btn-sm" onclick="disallowSubscription(${s.id}, '${s.subscription_number}')">
-              ❌ Disallow & Refund
+              Disallow & 100% Refund
             </button>
           ` : `<span style="font-size: 0.75rem; color: var(--text-muted);">Refunded / Disallowed</span>`}
         </td>
@@ -384,8 +394,50 @@ async function loadAdminSubscriptions() {
   }
 }
 
+async function loadStaffRefundSubscriptions() {
+  const tbody = document.getElementById("staff-refund-subscriptions-table");
+  if (!tbody) return;
+  tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Loading subscriptions...</td></tr>`;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/subscriptions`);
+    const subs = await res.json();
+
+    if (!subs || subs.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align: center;">No client subscriptions found.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = subs.slice(0, 20).map(s => `
+      <tr>
+        <td style="font-weight: 700;">${s.subscription_number}</td>
+        <td>
+          <div style="font-weight: 600;">${s.customer_name}</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted);">${s.customer_email}</div>
+        </td>
+        <td>
+          <div>${s.plan_name}</div>
+          <div style="font-size: 0.75rem; color: var(--primary);">${s.variant_name || "Standard Brand"}</div>
+        </td>
+        <td>${s.quantity}</td>
+        <td style="font-weight: 700;">₹${s.total_amount.toLocaleString("en-IN")}</td>
+        <td><span class="badge badge-${s.status.toLowerCase()}">${s.status}</span></td>
+        <td>
+          ${s.status !== "Cancelled" && s.status !== "Closed" ? `
+            <button class="btn btn-danger btn-sm" onclick="disallowSubscription(${s.id}, '${s.subscription_number}')">
+              ⚡ Disallow & 100% Refund
+            </button>
+          ` : `<span style="font-size: 0.75rem; color: var(--text-muted);">Refunded & Revoked</span>`}
+        </td>
+      </tr>
+    `).join("");
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="7" style="color: var(--danger);">Failed to load subscriptions: ${err}</td></tr>`;
+  }
+}
+
 async function disallowSubscription(subId, subNumber) {
-  if (!confirm(`Are you sure you want to disallow subscription ${subNumber}?\n\nThis will instantly:\n1. Cancel the subscription in real-time\n2. Mark paid invoices as REFUNDED\n3. Record a full refund in payments`)) {
+  if (!confirm(`Are you sure you want to disallow subscription ${subNumber}?\n\nThis will instantly:\n1. Cancel the subscription in real-time\n2. Mark paid invoices as REFUNDED\n3. Record a full 100% refund in payments`)) {
     return;
   }
 
@@ -400,7 +452,9 @@ async function disallowSubscription(subId, subNumber) {
 
     alert(`✅ ${data.message}\n${data.refund_processed ? `💰 Full Refund of ₹${data.refund_amount.toLocaleString("en-IN")} credited to customer.` : "No paid invoices needed refunding."}`);
     
-    // Refresh admin tables and metrics in real-time
+    // Refresh tables in real-time
+    loadStaffRefundSubscriptions();
+    loadStaffSubscriptions();
     loadAdminMetrics();
     loadAdminSubscriptions();
     loadAuditReport();
@@ -473,6 +527,34 @@ async function submitDetailedCreatePlan() {
   } catch (err) {
     alert("Create plan error: " + err);
   }
+}
+
+function updateLivePlanPreview() {
+  const name = document.getElementById("new-plan-name")?.value.trim() || "New Enterprise Plan";
+  const code = document.getElementById("new-plan-code")?.value.trim() || "PLN-0109";
+  const desc = document.getElementById("new-plan-desc")?.value.trim() || "High-performance enterprise recurrent billing license with automated reconciliation and SLA support.";
+  const cat = document.getElementById("new-plan-cat")?.value || "Retail";
+  const period = document.getElementById("new-plan-period")?.value || "monthly";
+  const rate = parseFloat(document.getElementById("new-plan-rate")?.value) || 12500;
+  const cap = document.getElementById("new-plan-cap")?.value || "100";
+  const deadline = document.getElementById("new-plan-deadline")?.value || "2026-11-30";
+
+  const pCode = document.getElementById("preview-plan-code");
+  if (pCode) pCode.textContent = code;
+  const pName = document.getElementById("preview-plan-name");
+  if (pName) pName.textContent = name;
+  const pCat = document.getElementById("preview-plan-cat");
+  if (pCat) pCat.textContent = cat;
+  const pPeriod = document.getElementById("preview-plan-period");
+  if (pPeriod) pPeriod.textContent = period.charAt(0).toUpperCase() + period.slice(1) + " Cycle";
+  const pPrice = document.getElementById("preview-plan-price");
+  if (pPrice) pPrice.innerHTML = `₹${rate.toLocaleString("en-IN", { minimumFractionDigits: 2 })} <span style="font-size: 0.82rem; font-weight: 400; color: var(--text-muted);">/ ${period}</span>`;
+  const pDesc = document.getElementById("preview-plan-desc");
+  if (pDesc) pDesc.textContent = desc;
+  const pCap = document.getElementById("preview-plan-cap");
+  if (pCap) pCap.textContent = `Max ${cap} Subscribers`;
+  const pDeadline = document.getElementById("preview-plan-deadline");
+  if (pDeadline) pDeadline.textContent = deadline;
 }
 
 async function loadAdminManagePlans() {
@@ -822,6 +904,7 @@ async function submitCreateStaff() {
   const name = document.getElementById("staff-name").value.trim();
   const email = document.getElementById("staff-email").value.trim();
   const phone = document.getElementById("staff-phone").value.trim();
+  const commission_rate = parseFloat(document.getElementById("staff-comm")?.value) || 7.5;
 
   if (!name || !email) {
     alert("Please enter both staff name and email.");
@@ -832,15 +915,20 @@ async function submitCreateStaff() {
     const res = await fetch(`${API_BASE}/api/admin/staff`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, phone })
+      body: JSON.stringify({ name, email, phone, commission_rate, assigned_plan: "All Plans" })
     });
     const data = await res.json();
     if (!res.ok) {
       alert("Error: " + data.detail);
       return;
     }
-    alert(`✅ New Staff Member '${data.staff.name}' onboarded successfully!`);
+    alert(`✅ Operations Staff Member '${name}' onboarded successfully with ${commission_rate}% commission!`);
+    closeModal("onboard-staff-modal");
     closeModal("add-staff-modal");
+    document.getElementById("staff-name").value = "";
+    document.getElementById("staff-email").value = "";
+    document.getElementById("staff-phone").value = "";
+    loadStaffCommissions();
   } catch (err) {
     alert("Error: " + err);
   }
@@ -896,7 +984,7 @@ async function openExecutiveReportModal() {
       <div class="invoice-header-row">
         <div>
           <div style="font-family: 'Outfit', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--primary);">
-            ⚡ Brightloop Software — Executive Financial Report
+            Brightloop Software — Executive Financial Audit Report
           </div>
           <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
             Comprehensive Investment, Plan Breakdown & Staff Governance Audit<br>
@@ -911,7 +999,7 @@ async function openExecutiveReportModal() {
             Generated: ${data.generated_at}
           </div>
           <div style="font-size: 0.78rem; color: var(--text-muted);">
-            Engine: Local SQLite Fast-Engine (<20ms)
+            Engine: Brightloop Enterprise Core Engine
           </div>
         </div>
       </div>
@@ -1146,6 +1234,8 @@ async function loadStaffSubscriptions(category = "All", expiring = false) {
         </td>
       </tr>
     `).join("");
+
+    loadStaffRefundSubscriptions();
   } catch (err) {
     tbody.innerHTML = `<tr><td colspan="7" style="color: var(--danger);">Failed to load subscriptions: ${err}</td></tr>`;
   }
@@ -1532,13 +1622,25 @@ async function submitRegister() {
 }
 
 function openModal(id) {
-  const modal = document.getElementById(id);
-  if (modal) modal.classList.add("active");
+  let modal = document.getElementById(id);
+  if (!modal && id === "add-staff-modal") modal = document.getElementById("onboard-staff-modal");
+  if (!modal && id === "onboard-staff-modal") modal = document.getElementById("add-staff-modal");
+  if (modal) {
+    modal.classList.add("active");
+    document.body.classList.add("modal-open");
+  }
 }
 
 function closeModal(id) {
-  const modal = document.getElementById(id);
-  if (modal) modal.classList.remove("active");
+  let modal = document.getElementById(id);
+  if (!modal && id === "add-staff-modal") modal = document.getElementById("onboard-staff-modal");
+  if (!modal && id === "onboard-staff-modal") modal = document.getElementById("add-staff-modal");
+  if (modal) {
+    modal.classList.remove("active");
+    if (!document.querySelector(".modal.active")) {
+      document.body.classList.remove("modal-open");
+    }
+  }
 }
 
 // Start with Google Sign-In Landing Page
