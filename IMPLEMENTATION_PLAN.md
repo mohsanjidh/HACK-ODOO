@@ -12,22 +12,22 @@
 HACK/
 ├── backend/
 │   ├── core/
-│   │   ├── config.py           ➔ [Mohammed Sanjidh S] App settings, JWT secrets & CORS
-│   │   ├── database.py         ➔ [Dharshin R] SQLAlchemy 2.0 SQLite engine & sessions
-│   │   └── security.py         ➔ [Mohammed Sanjidh S] Bcrypt hashing & JWT utilities
-│   ├── models/                 ➔ [Dharshin R] Core DB Models (User, Product, Plan, Sub, Invoice, Payment, Discount, Tax)
+│   │   ├── config.py           ➔ [Dharshin R] App settings, JWT secrets & CORS
+│   │   ├── database.py         ➔ [Mohammed Sanjidh S] SQLAlchemy 2.0 SQLite engine & sessions
+│   │   └── security.py         ➔ [Dharshin R] Bcrypt hashing & JWT utilities
+│   ├── models/                 ➔ [Mohammed Sanjidh S] Core DB Models (User, Product, Plan, Sub, Invoice, Payment, Discount, Tax)
 │   ├── schemas/                ➔ [Shared] Pydantic request/response validation schemas
 │   ├── services/
-│   │   ├── billing_engine.py   ➔ [Dharshin R] Automated batch billing run & idempotency guard
-│   │   ├── state_machine.py    ➔ [Dharshin R] Subscription lifecycle (Draft->Closed)
-│   │   └── discount_engine.py  ➔ [Dharshin R] Discount rules & tax calculations
+│   │   ├── billing_engine.py   ➔ [Mohammed Sanjidh S] Automated batch billing run & idempotency guard
+│   │   ├── state_machine.py    ➔ [Mohammed Sanjidh S] Subscription lifecycle (Draft->Closed)
+│   │   └── discount_engine.py  ➔ [Mohammed Sanjidh S] Discount rules & tax calculations
 │   ├── routers/
-│   │   ├── admin.py            ➔ [Dharshin R] Admin APIs: Products, Plans, Taxes, Discounts, Finance Metrics
-│   │   ├── staff.py            ➔ [Dharshin R] Staff APIs: Subscription categorization, Expiry alerts, Invoicing run
+│   │   ├── admin.py            ➔ [Mohammed Sanjidh S] Admin APIs: Products, Plans, Taxes, Discounts, Finance Metrics
+│   │   ├── staff.py            ➔ [Mohammed Sanjidh S] Staff APIs: Subscription categorization, Expiry alerts, Invoicing run
 │   │   ├── user.py             ➔ [MRINAL V] Customer Portal APIs: Plan browsing, Checkout, Invoice history
 │   │   └── auth.py             ➔ [MRINAL V] Authentication & Password validation endpoints
-│   ├── main.py                 ➔ [Mohammed Sanjidh S] FastAPI root application
-│   └── requirements.txt        ➔ [Mohammed Sanjidh S] Pinned dependencies
+│   ├── main.py                 ➔ [Dharshin R] FastAPI root application
+│   └── requirements.txt        ➔ [Dharshin R] Pinned dependencies
 ├── data/
 │   └── synthetic/              ➔ [MRINAL V] Synthetic Datasets (Customers, Plans, Subscriptions, Invoices CSVs)
 │       └── seed.py             ➔ [MRINAL V] Database loader & seeder script
@@ -54,7 +54,7 @@ HACK/
 
 ## 👥 ROLE & FEATURE DISTRIBUTION
 
-### 1. 🛠️ Dharshin R (Admin & Staff Backend Engines)
+### 1. 🛠️ Mohammed Sanjidh S (Core Data Models, Admin & Staff Backend Engines, Billing & State Machine)
 * **Core Data Models (`backend/models/models.py`)**:
   - [x] Implemented `User`, `Plan`, `Variant`, `Subscription`, `Invoice`, `Payment`, `DiscountRule`, `TaxRule`.
   - [x] Product Variants with price deltas (**Odoo Brand Integration adds +₹560**).
@@ -98,9 +98,9 @@ HACK/
   - **Staff View**: Clean **email/inbox-style** subscription list with status badges and quick renewal action buttons.
   - **Customer View**: Interactive plan cards with Monthly/Yearly toggle, payment checkout modal, and offline-accessible printable receipts.
 * **Frontend-Backend Integration**:
-  - Connect the views to Dharshin's and Mrinal's FastAPI endpoints using `frontend/js/api.js`.
+  - Connect the views to Sanjidh's and Mrinal's FastAPI endpoints using `frontend/js/api.js`.
 
-### 4. 👨‍💼 Mohammed Sanjidh S (Base Architecture, Security & Frontend System Design)
+### 4. 👨‍💼 Dharshin R (Systems Architecture, Base App, Security & Frontend Design)
 * **Core Infrastructure**:
   - FastAPI app initialization, CORS middleware, global error handling.
   - JWT token utilities and bcrypt password hashing.
@@ -113,9 +113,9 @@ HACK/
 ---
 
 ## 🔄 WORKFLOW SEQUENCE
-1. **Dharshin** creates the core SQLite database models & schema.
+1. **Sanjidh** creates the core SQLite database models & schema.
 2. **Mrinal** creates the synthetic data files in `data/synthetic/` and writes `seed.py` to populate SQLite.
-3. **Dharshin** builds the Admin & Staff backend API routes.
+3. **Sanjidh** builds the Admin & Staff backend API routes.
 4. **Mrinal** builds the User/Customer backend API routes.
 5. **Haritha** builds the 3 frontend views and wires them to the live API.
 6. **All members** commit and push their individual files to `main` with entries in `CHANGELOG.md`.

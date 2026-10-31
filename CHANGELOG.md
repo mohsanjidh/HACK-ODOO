@@ -4,7 +4,7 @@ All team members must log every code change, module creation, and bug fix here p
 
 ---
 
-## 👨‍💼 Mohammed Sanjidh S (Architecture, Base Setup & Frontend Design)
+## 👨‍💼 Dharshin R (Systems Architecture, Base App, Security & Frontend Design)
 
 - **[10:15 AM]** Created `IMPLEMENTATION_PLAN.md` with team work distribution, heads-up onboarding guide, and file ownership boundaries.
 - **[10:15 AM]** Initialized `CHANGELOG.md` for mandatory cross-team change tracking.
@@ -18,7 +18,7 @@ All team members must log every code change, module creation, and bug fix here p
 
 ---
 
-## 🛠️ Dharshin R (Admin & Staff Backend, Data Models & Architecture)
+## 🛠️ Mohammed Sanjidh S (Core Data Models, Admin & Staff Backend Engines, Billing & State Machine)
 
 - **[10:42 AM]** Added official hackathon reference documentation in `docs/`:
   - `PROBLEM_STATEMENT.md`: Complete Brightloop Software requirements and scenes.

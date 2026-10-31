@@ -81,7 +81,7 @@ Interactive Swagger API documentation is available at **`http://127.0.0.1:8000/d
 ---
 
 ## 📜 Team Members
-* **Mohammed Sanjidh S** — Systems Architecture, Base App, Security & Frontend Design
-* **Dharshin R** — Core Data Models, Admin & Staff Backend Engines, Billing & State Machine
+* **Dharshin R** — Systems Architecture, Base App, Security & Frontend Design
+* **Mohammed Sanjidh S** — Core Data Models, Admin & Staff Backend Engines, Billing & State Machine
 * **MRINAL V** — Synthetic Datasets, Database Seeder & Customer Backend
 * **D Haritha** — Responsive UI Design & Component Layouts
