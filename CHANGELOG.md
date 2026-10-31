@@ -45,6 +45,14 @@ All team members must log every code change, module creation, and bug fix here p
   - Verified explicit state machine blocking illegal transitions.
   - Verified automated batch billing idempotency guard (zero duplicate invoices).
   - Live server started on `http://127.0.0.1:8000` with interactive UI and Swagger API docs at `/docs`.
+- **[01:00 PM]** Implemented Authentication, Access Control & Password Policy System:
+  - `backend/routers/auth.py`: Registration, Login, Forgot Password, and Demo Accounts endpoints.
+  - Implemented Scene 1 strict password validation (> 8 characters, uppercase, lowercase, special character).
+  - Enforced unique email constraint across all user accounts.
+  - Implemented simulated forgot-password reset token generator and dispatch.
+  - Added frontend auth state management, Sign In modal with 1-click demo logins, Create Account modal with live interactive password strength validator, and Forgot Password modal.
+  - Enforced Role-Based Access Control (RBAC) navigation gating based on logged-in user role.
+  - Verified 10/10 test cases in automated verification suite.
 
 ---
 

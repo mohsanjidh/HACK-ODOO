@@ -73,6 +73,12 @@ HACK/
   - [x] Expiry tracking with instant overdue alerts and simulated renewal notifications.
   - [x] Batch billing run execution endpoint.
   - [x] Invoice listing & payment reconciliation endpoint.
+* **Authentication & Access Control (`backend/routers/auth.py`)**:
+  - [x] User registration with unique email enforcement.
+  - [x] Scene 1 strict password policy (> 8 chars, uppercase, lowercase, special character).
+  - [x] User login & session management with demo accounts (Admin, Staff, Customer).
+  - [x] Forgot password simulated reset token generation and email dispatch.
+  - [x] Role-Based Access Control (RBAC) navigation gating and interactive auth UI modals.
 
 ### 2. 🔐 MRINAL V (Synthetic Data, DB Seeder & User Portal Backend)
 * **Synthetic Dataset Creation (`data/synthetic/`)**:

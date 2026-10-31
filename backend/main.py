@@ -5,7 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
 from backend.core.config import PROJECT_NAME, VERSION
-from backend.routers import admin, staff
+from backend.routers import admin, staff, auth
 
 app = FastAPI(
     title=PROJECT_NAME,
@@ -23,6 +23,7 @@ app.add_middleware(
 )
 
 # Include Routers
+app.include_router(auth.router)
 app.include_router(admin.router)
 app.include_router(staff.router)
 

@@ -1,33 +1,212 @@
-// Brightloop Front-end Application
+// Brightloop Front-end Application with Authentication & RBAC
 const API_BASE = "";
 
 let currentCategory = "All";
 let currentSearch = "";
 let isExpiringOnly = false;
 
-// 1. Role / View Switching
+// Default session is Admin for immediate evaluation, but can be switched
+let currentUser = {
+  id: 0,
+  name: "Bhavya Admin",
+  email: "admin@brightloop.local",
+  role: "admin",
+  company_name: "Brightloop Software HQ"
+};
+
+// 1. Live Password Validation (Problem Statement Scene 1)
+function checkPasswordLive(val) {
+  const isLen = val.length > 8;
+  const isUpper = /[A-Z]/.test(val);
+  const isLower = /[a-z]/.test(val);
+  const isSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(val);
+
+  updatePwdBadge("pwd-len", isLen, "Greater than 8 characters");
+  updatePwdBadge("pwd-upper", isUpper, "At least one uppercase letter (A-Z)");
+  updatePwdBadge("pwd-lower", isLower, "At least one lowercase letter (a-z)");
+  updatePwdBadge("pwd-special", isSpecial, "At least one special character (!@#$%^&*)");
+}
+
+function updatePwdBadge(id, valid, text) {
+  const el = document.getElementById(id);
+  if (valid) {
+    el.textContent = `✓ ${text}`;
+    el.classList.add("valid");
+  } else {
+    el.textContent = `✕ ${text}`;
+    el.classList.remove("valid");
+  }
+}
+
+// 2. Authentication Operations
+async function submitRegister() {
+  const name = document.getElementById("reg-name").value.trim();
+  const email = document.getElementById("reg-email").value.trim();
+  const company = document.getElementById("reg-company").value.trim();
+  const password = document.getElementById("reg-password").value;
+
+  if (!name || !email || !password) {
+    alert("Please fill in all mandatory fields.");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/api/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, password, company_name: company })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      alert("Registration Error: " + data.detail);
+      return;
+    }
+
+    alert(`🎉 Account created successfully for ${data.user.name}!\nLogging you in as Customer...`);
+    closeModal("register-modal");
+    setSession(data.user);
+  } catch (err) {
+    alert("Registration error: " + err);
+  }
+}
+
+async function submitLogin() {
+  const email = document.getElementById("login-email").value.trim();
+  const password = document.getElementById("login-password").value;
+
+  if (!email || !password) {
+    alert("Please enter email and password.");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/api/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      alert("Login Error: " + data.detail);
+      return;
+    }
+
+    closeModal("login-modal");
+    setSession(data.user);
+  } catch (err) {
+    alert("Login failed: " + err);
+  }
+}
+
+function quickLogin(email) {
+  document.getElementById("login-email").value = email;
+  document.getElementById("login-password").value = "Demo#Pass2026!";
+  submitLogin();
+}
+
+function openForgotPassword() {
+  closeModal("login-modal");
+  openModal("forgot-modal");
+}
+
+async function submitForgotPassword() {
+  const email = document.getElementById("forgot-email").value.trim();
+  const resultDiv = document.getElementById("forgot-result");
+
+  if (!email) {
+    alert("Please enter your registered email address.");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/api/auth/forgot-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.detail);
+      return;
+    }
+
+    resultDiv.style.display = "block";
+    resultDiv.innerHTML = `
+      <strong>✅ Reset Link Dispatched!</strong><br>
+      ${data.message}<br>
+      <span style="font-size: 0.75rem; word-break: break-all;">Preview Token Link: <a href="${data.reset_link_preview}" target="_blank">${data.reset_link_preview}</a></span>
+    `;
+  } catch (err) {
+    alert("Error: " + err);
+  }
+}
+
+function setSession(user) {
+  currentUser = user;
+  document.getElementById("auth-buttons").style.display = "none";
+  const userInfo = document.getElementById("auth-user-info");
+  userInfo.style.display = "flex";
+  document.getElementById("user-display-name").textContent = user.name;
+  document.getElementById("user-display-role").textContent = user.role.toUpperCase();
+
+  document.getElementById("session-banner").style.display = "flex";
+  document.getElementById("session-user-text").textContent = `Logged in as ${user.name} (${user.email}) — Role: ${user.role.toUpperCase()}`;
+
+  // Role-Based UI Visibility (RBAC)
+  const btnAdmin = document.getElementById("btn-nav-admin");
+  const btnStaff = document.getElementById("btn-nav-staff");
+  const btnCust = document.getElementById("btn-nav-customer");
+
+  if (user.role === "customer") {
+    btnAdmin.style.display = "none";
+    btnStaff.style.display = "none";
+    btnCust.style.display = "block";
+    switchView("customer");
+  } else if (user.role === "staff") {
+    btnAdmin.style.display = "none";
+    btnStaff.style.display = "block";
+    btnCust.style.display = "block";
+    switchView("staff");
+  } else { // admin
+    btnAdmin.style.display = "block";
+    btnStaff.style.display = "block";
+    btnCust.style.display = "block";
+    switchView("admin");
+  }
+}
+
+function logoutUser() {
+  currentUser = null;
+  document.getElementById("auth-buttons").style.display = "flex";
+  document.getElementById("auth-user-info").style.display = "none";
+  document.getElementById("session-banner").style.display = "none";
+  alert("You have been signed out. Please sign in or use 1-Click Demo Login.");
+  openModal("login-modal");
+}
+
+// 3. View Switching
 function switchView(role) {
   document.querySelectorAll(".role-btn").forEach(btn => btn.classList.remove("active"));
   document.querySelectorAll(".view-section").forEach(sec => sec.classList.remove("active"));
 
   if (role === "admin") {
-    document.querySelectorAll(".role-btn")[0].classList.add("active");
+    document.getElementById("btn-nav-admin").classList.add("active");
     document.getElementById("admin-view").classList.add("active");
     loadAdminMetrics();
     loadAdminPlans();
   } else if (role === "staff") {
-    document.querySelectorAll(".role-btn")[1].classList.add("active");
+    document.getElementById("btn-nav-staff").classList.add("active");
     document.getElementById("staff-view").classList.add("active");
     loadStaffSubscriptions();
   } else if (role === "customer") {
-    document.querySelectorAll(".role-btn")[2].classList.add("active");
+    document.getElementById("btn-nav-customer").classList.add("active");
     document.getElementById("customer-view").classList.add("active");
     loadCustomerPlans();
     loadCustomerInvoices();
   }
 }
 
-// 2. Admin Portal Operations
+// 4. Admin Portal Operations
 async function loadAdminMetrics() {
   try {
     const res = await fetch(`${API_BASE}/api/admin/metrics`);
@@ -135,7 +314,7 @@ async function loadAdminStaff() {
   }
 }
 
-// 3. Staff Operations
+// 5. Staff Operations
 async function loadStaffSubscriptions(expiring = false) {
   isExpiringOnly = expiring;
   const tbody = document.getElementById("staff-subscriptions-table");
@@ -245,7 +424,7 @@ async function transitionSub(subId, newStatus) {
   }
 }
 
-// 4. Customer Portal
+// 6. Customer Portal Operations
 async function loadCustomerPlans() {
   const grid = document.getElementById("customer-plans-grid");
   try {
@@ -357,6 +536,5 @@ async function submitCreateStaff() {
 
 // Initial Load
 document.addEventListener("DOMContentLoaded", () => {
-  loadAdminMetrics();
-  loadAdminPlans();
+  setSession(currentUser);
 });
