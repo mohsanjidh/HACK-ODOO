@@ -1,0 +1,64 @@
+# ─────────────────────────────────────
+#  Subscription Management System
+#  Odoo x Make-A-Ton 9.0 Hackathon 2026
+# ─────────────────────────────────────
+
+# ── Python ──────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ── Virtual environments ─────────────
+.venv/
+venv/
+env/
+ENV/
+
+# ── Secrets & config ─────────────────
+.env
+.env.*
+*.secret
+config.local.*
+
+# ── Database files ───────────────────
+*.db
+*.sqlite
+*.sqlite3
+
+# ── Logs ─────────────────────────────
+*.log
+logs/
+
+# ── Node / Frontend ──────────────────
+node_modules/
+dist/
+.cache/
+
+# ── OS files ─────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDE ──────────────────────────────
+.vscode/
+.idea/
+*.suo
+*.user
+
+# ── Test artifacts ────────────────────
+.pytest_cache/
+htmlcov/
+.coverage
+
+# ── Reference folder (NOT part of submission) ──
+# ECO is a sibling directory outside this repo,
+# so it cannot be committed here. This note is
+# a reminder: do NOT copy ECO code into HACK.
+# HACK is fully independent original work.
