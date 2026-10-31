@@ -13,7 +13,10 @@ All team members must log every code change, module creation, and bug fix here p
 
 ## 🛠️ Dharshin R (Data Models, Lifecycle & Billing Engine)
 
-*(Add your entries below as you develop)*
+- **[10:42 AM]** Added official hackathon documentation in `HACK/docs/`:
+  - `PROBLEM_STATEMENT.md`: Complete Brightloop Software requirements and scenes.
+  - `EVALUATION_CRITERIA.md`: Mandatory Must-Have, Nice-to-Have, and evaluator rules (single branch `main`, hourly commits).
+  - `TEAM_LEAD_QNA_GUIDE.md`: Comprehensive defense guide and Q&A cheat sheet for Team Leader Sanjidh.
 
 ---
 
