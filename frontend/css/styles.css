@@ -608,6 +608,542 @@ tr:hover td {
   }
 }
 
+/* ======================================================== */
+/* GOOGLE-INSPIRED SIGN-IN EXPERIENCE                       */
+/* ======================================================== */
+
+.signin-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background-color: var(--bg-light);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(1, 126, 132, 0.06) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(15, 23, 42, 0.04) 0px, transparent 50%);
+}
+
+.signin-google-card {
+  max-width: 448px;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #dadce0;
+  border-radius: 28px;
+  padding: 40px 36px 36px;
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+@media (max-width: 480px) {
+  .signin-google-card {
+    padding: 28px 20px 24px;
+    border-radius: 20px;
+  }
+}
+
+.signin-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.signin-brand-logo {
+  height: 44px;
+  max-width: 220px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(1, 126, 132, 0.08));
+}
+
+@media (max-width: 480px) {
+  .signin-brand-logo {
+    height: 38px;
+    max-width: 180px;
+  }
+}
+
+.header-brand-logo {
+  height: 32px;
+  width: auto;
+  max-width: 170px;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+@media (max-width: 480px) {
+  .header-brand-logo {
+    height: 26px;
+    max-width: 130px;
+  }
+}
+
+/* Compact Sidebar Header Brand */
+.sidebar-brand-compact {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 4px 16px 4px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.sidebar-logo-symbol {
+  height: 24px;
+  width: auto;
+  max-width: 36px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.sidebar-brand-label {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+}
+
+.sidebar.collapsed .sidebar-brand-compact {
+  justify-content: center;
+  padding: 0 0 14px 0;
+}
+
+.sidebar.collapsed .sidebar-brand-label {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .sidebar-brand-compact {
+    display: none;
+  }
+}
+
+.signin-title {
+  font-size: 1.55rem;
+  font-weight: 600;
+  color: #1f1f1f;
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+}
+
+.signin-subtitle {
+  font-size: 0.94rem;
+  color: #444746;
+  margin-bottom: 24px;
+}
+
+/* Outlined Floating/Modern Input Groups */
+.signin-field-group {
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.signin-label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #444746;
+  margin-bottom: 6px;
+}
+
+.signin-forgot-link {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #017E84;
+  text-decoration: none;
+}
+
+.signin-forgot-link:hover {
+  text-decoration: underline;
+  color: #0f766e;
+}
+
+.signin-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.signin-input {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 0.94rem;
+  color: #1f1f1f;
+  background: #ffffff;
+  border: 1px solid #747775;
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.signin-input:focus {
+  border-color: #017E84;
+  box-shadow: 0 0 0 3px rgba(1, 126, 132, 0.15);
+}
+
+.signin-input.input-error {
+  border-color: #ba1a1a !important;
+  background-color: #fff8f7;
+}
+
+.signin-eye-btn {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: #747775;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.signin-eye-btn:hover {
+  color: #1f1f1f;
+  background-color: #f1f3f4;
+}
+
+.signin-feedback {
+  font-size: 0.76rem;
+  color: #ba1a1a;
+  margin-top: 4px;
+  min-height: 16px;
+}
+
+/* Alert Banner */
+.signin-alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.84rem;
+  margin-bottom: 18px;
+  animation: signinSlideDown 0.2s ease-out;
+}
+
+@keyframes signinSlideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.signin-alert-error {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+/* Actions Row (Create account link + Sign In button) */
+.signin-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+  margin-bottom: 22px;
+}
+
+.signin-create-link {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #017E84;
+  text-decoration: none;
+  padding: 8px 4px;
+  border-radius: 4px;
+  transition: color 0.15s ease;
+}
+
+.signin-create-link:hover {
+  text-decoration: underline;
+  color: #0f766e;
+}
+
+.btn-signin-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #017E84;
+  color: #ffffff;
+  border: none;
+  padding: 10px 26px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(1, 126, 132, 0.3);
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease;
+  min-width: 105px;
+  height: 42px;
+}
+
+.btn-signin-primary:hover:not(:disabled) {
+  background-color: #0f766e;
+  box-shadow: 0 2px 6px rgba(1, 126, 132, 0.4);
+}
+
+.btn-signin-primary:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn-signin-primary:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
+.signin-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Secondary Compact Personas Section */
+.signin-secondary-section {
+  border-top: 1px solid #f1f3f4;
+  padding-top: 18px;
+  text-align: center;
+}
+
+.signin-divider-label {
+  font-size: 0.74rem;
+  color: #747775;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.signin-personas-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.btn-persona-compact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  text-align: left;
+}
+
+.btn-persona-compact:hover {
+  background: #f0fdfa;
+  border-color: #99f6e4;
+  transform: translateY(-1px);
+}
+
+.persona-role-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #017E84;
+  background: #e6f4f5;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+/* ======================================================== */
+/* MODERN FINANCIAL ANALYTICS GRAPH & POLISHED TOOLTIPS     */
+/* ======================================================== */
+
+.graph-wrapper {
+  position: relative;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 8px;
+  user-select: none;
+}
+
+.graph-svg-container {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
+
+.graph-line-invested {
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
+  animation: graphDashIn 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.graph-line-profit {
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
+  animation: graphDashIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.05s forwards;
+}
+
+.graph-line-expenses {
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
+  animation: graphDashIn 1.3s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+}
+
+@keyframes graphDashIn {
+  to { stroke-dashoffset: 0; }
+}
+
+.graph-area-fill {
+  opacity: 0;
+  animation: graphFadeIn 0.7s ease-out 0.4s forwards;
+}
+
+@keyframes graphFadeIn {
+  to { opacity: 1; }
+}
+
+/* Polished, Clean White SaaS Tooltip */
+.graph-tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #ffffff;
+  color: #1e293b;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  pointer-events: none;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04);
+  border: 1px solid #e2e8f0;
+  transform: translate(-50%, -112%);
+  transition: opacity 0.12s ease, transform 0.06s ease;
+  z-index: 50;
+  min-width: 190px;
+}
+
+.graph-tooltip-title {
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: #0f172a;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.graph-tooltip-margin-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #017E84;
+  background: #e6f4f5;
+  padding: 1px 6px;
+  border-radius: 9999px;
+}
+
+.graph-tooltip-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 3px 0;
+  font-size: 0.76rem;
+  color: #475569;
+}
+
+.graph-tooltip-dot {
+  width: 6.5px;
+  height: 6.5px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.graph-point-subtle {
+  transition: r 0.18s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.18s ease;
+}
+
+/* ======================================================== */
+/* STAFF AUTOMATED BATCH BILLING BANNER STYLES              */
+/* ======================================================== */
+
+.billing-banner-info {
+  background: #eff6ff !important;
+  border: 1px solid #bfdbfe !important;
+  color: #1e40af !important;
+}
+
+.billing-banner-success {
+  background: #ecfdf5 !important;
+  border: 1px solid #10b981 !important;
+  color: #065f46 !important;
+}
+
+.billing-banner-error {
+  background: #fef2f2 !important;
+  border: 1px solid #f87171 !important;
+  color: #991b1b !important;
+}
+
+/* ======================================================== */
+/* AUTHENTICATION & CUSTOMER SUBSCRIPTION UX ENHANCEMENTS   */
+/* ======================================================== */
+
+.signin-alert-success {
+  background: #ecfdf5 !important;
+  border: 1px solid #10b981 !important;
+  color: #065f46 !important;
+}
+
+.plan-catalog-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.plan-catalog-card:hover {
+  transform: translateY(-2px);
+  border-color: #017E84;
+  box-shadow: 0 8px 24px rgba(1, 126, 132, 0.08);
+}
+
+.plan-card-feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0 18px;
+  font-size: 0.82rem;
+  color: #475569;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.plan-card-feature-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.plan-card-feature-list li::before {
+  content: "✓";
+  color: #017E84;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
 @media print {
   /* Hide all app chrome, headers, navigation, buttons, and backdrop */
   header, #landing-auth-gate, .sidebar, .btn, .modal-close, .top-actions, .filter-tabs, #sidebar-toggle-btn {
@@ -617,9 +1153,7 @@ tr:hover td {
   /* Hide regular main-content if a printable modal is active */
   body.modal-open .app-container,
   body.modal-open .main-content,
-  body.modal-open #admin-view,
-  body.modal-open #staff-view,
-  body.modal-open #customer-view {
+  body.modal-open .view-panel {
     display: none !important;
   }
   
