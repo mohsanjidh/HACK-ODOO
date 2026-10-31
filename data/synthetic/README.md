@@ -13,3 +13,4 @@ This directory holds the authentic synthetic data for the Brightloop Subscriptio
    - `id`, `invoice_number`, `subscription_number`, `amount`, `tax_amount`, `discount_amount`, `status` (*Paid, Confirmed, Overdue*), `due_date`, `payment_method`
 5. `seed.py`:
    - Python script that reads these files and populates the local SQLite database.
+

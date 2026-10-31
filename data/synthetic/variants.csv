@@ -1,0 +1,6 @@
+id,product_name,variant_name,extra_price,notes
+1,Brightloop ERP Core,Standard Brand,0.0,Default Brightloop branded user interface.
+2,Brightloop ERP Core,Odoo Brand Integration,560.0,Official Odoo ERP synchronization & branding (Adds +560).
+3,Brightloop ERP Core,White-Label Enterprise,1500.0,Custom corporate branding and dedicated domain.
+4,Brightloop POS & Inventory,Single Terminal,0.0,One cash counter license.
+5,Brightloop POS & Inventory,Multi-Counter Sync,750.0,Sync across up to 5 checkout counters.

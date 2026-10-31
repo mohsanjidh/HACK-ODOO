@@ -1,0 +1,9 @@
+id,name,category,billing_period,price,min_qty,auto_close,pausable,renewable,description
+1,Retail POS Starter,Retail,monthly,1999.0,1,0,1,1,Cloud POS and billing software for single-store retail.
+2,Retail POS Annual,Retail,yearly,19990.0,1,0,1,1,Yearly retail billing pass with 2 months free.
+3,Healthcare Clinic Suite,Healthcare,monthly,4999.0,3,0,1,1,"Patient records, billing & appointments for clinics."
+4,Healthcare Enterprise Annual,Healthcare,yearly,89990.0,10,1,0,1,Comprehensive hospital management and multi-ward license.
+5,Finance Ledger Pro,Finance,monthly,3499.0,2,0,1,1,"Automated accounts, tax computation and compliance."
+6,Tech Enterprise Cloud,Tech,yearly,120000.0,15,1,1,1,High-availability ERP with multi-branch synchronization.
+7,Weekly Sprint Pass,Testing,weekly,499.0,1,1,0,0,Short-term trial pass for temporary audits.
+8,Daily Sandbox Access,Testing,daily,99.0,1,1,0,0,24-hour developer sandbox testing pass.

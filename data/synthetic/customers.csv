@@ -1,0 +1,103 @@
+id,name,email,company_name,company_size,industry,phone,role,signup_date
+0,Bhavya Admin,admin@brightloop.local,Brightloop Software HQ,large,Tech,+91 98765 43210,admin,2023-01-01
+999,Staff Support Rep,staff@brightloop.local,Brightloop Software Operations,medium,Tech,+91 98765 12345,staff,2023-01-01
+1,Meera Bhat,meera.bhat1@sterlingca.com,Sterling Capital,medium,Finance,+91 98218 15434,customer,2023-05-11
+2,Aditya Pillai,aditya.pillai2@carebridge.com,CareBridge Health,large,Health,+91 96215 70395,customer,2023-04-25
+3,Kavya Deshmukh,kavya.deshmukh3@urbanfresh.com,Urban Fresh Groceries,large,Retail,+91 92836 64421,customer,2023-03-18
+4,Arjun Nair,arjun.nair4@quickmarts.com,QuickMart Supermarket,large,Retail,+91 92344 97257,customer,2023-05-08
+5,Neha Das,neha.das5@dailyneeds.com,DailyNeeds Store,small,Retail,+91 91347 57370,customer,2023-05-28
+6,Deepak Nair,deepak.nair6@dailyneeds.com,DailyNeeds Store,small,Retail,+91 93860 49570,customer,2023-04-16
+7,Swati Saxena,swati.saxena7@urbanfresh.com,Urban Fresh Groceries,small,Retail,+91 90117 79118,customer,2023-09-16
+8,Neha Nair,neha.nair8@apexsupers.com,Apex Superstores,large,Retail,+91 94168 98144,customer,2023-02-12
+9,Neha Rao,neha.rao9@quickmarts.com,QuickMart Supermarket,large,Retail,+91 96287 51691,customer,2023-10-13
+10,Rohan Joshi,rohan.joshi10@vanguardfi.com,Vanguard FinTech,small,Finance,+91 94032 22520,customer,2023-01-31
+11,Ananya Pillai,ananya.pillai11@bytewaveso.com,ByteWave Software,small,Tech,+91 98438 44339,customer,2023-07-27
+12,Priya Deshmukh,priya.deshmukh12@quickmarts.com,QuickMart Supermarket,medium,Retail,+91 99405 68390,customer,2023-03-26
+13,Vikram Mehta,vikram.mehta13@nextgenail.com,NextGen AI Labs,large,Tech,+91 94079 64650,customer,2023-05-31
+14,Neha Joshi,neha.joshi14@quantumcod.com,Quantum Code Works,medium,Tech,+91 94909 47434,customer,2023-08-11
+15,Ritu Saxena,ritu.saxena15@primeessen.com,Prime Essentials,medium,Retail,+91 96223 53033,customer,2023-07-19
+16,Ananya Menon,ananya.menon16@carebridge.com,CareBridge Health,small,Health,+91 96435 68667,customer,2023-12-31
+17,Pooja Saxena,pooja.saxena17@quantumcod.com,Quantum Code Works,medium,Tech,+91 92805 74911,customer,2023-04-29
+18,Suresh Malhotra,suresh.malhotra18@nextgenail.com,NextGen AI Labs,medium,Tech,+91 93138 24591,customer,2023-06-23
+19,Aarav Kulkarni,aarav.kulkarni19@urbanfresh.com,Urban Fresh Groceries,small,Retail,+91 94504 73121,customer,2023-11-28
+20,Deepak Nair,deepak.nair20@nextgenail.com,NextGen AI Labs,large,Tech,+91 97884 44277,customer,2023-11-21
+21,Deepak Menon,deepak.menon21@apexdiagno.com,Apex Diagnostic Labs,large,Health,+91 97241 28923,customer,2023-09-17
+22,Meera Singhania,meera.singhania22@apexsupers.com,Apex Superstores,large,Retail,+91 93681 15507,customer,2023-03-27
+23,Kavya Das,kavya.das23@trustpayle.com,TrustPay Ledger Systems,small,Finance,+91 98276 98557,customer,2023-05-27
+24,Ritu Patel,ritu.patel24@cloudscale.com,CloudScale Solutions,small,Tech,+91 95832 29761,customer,2023-03-12
+25,Ananya Nair,ananya.nair25@apollocare.com,Apollo Care Clinics,large,Health,+91 96332 36658,customer,2023-04-03
+26,Swati Kulkarni,swati.kulkarni26@bytewaveso.com,ByteWave Software,small,Tech,+91 96999 86453,customer,2023-10-14
+27,Aditya Chopra,aditya.chopra27@summitweal.com,Summit Wealth Partners,small,Finance,+91 96601 22512,customer,2023-11-16
+28,Aditya Saxena,aditya.saxena28@nexuswealt.com,Nexus Wealth,small,Finance,+91 96048 55891,customer,2023-07-21
+29,Suresh Mehta,suresh.mehta29@sterlingca.com,Sterling Capital,medium,Finance,+91 93335 18220,customer,2023-11-23
+30,Ananya Joshi,ananya.joshi30@dailyneeds.com,DailyNeeds Store,medium,Retail,+91 93090 54215,customer,2023-05-25
+31,Ritu Patel,ritu.patel31@cloudscale.com,CloudScale Solutions,small,Tech,+91 91388 72025,customer,2023-01-09
+32,Priya Menon,priya.menon32@dailyneeds.com,DailyNeeds Store,medium,Retail,+91 90607 72254,customer,2023-08-11
+33,Rohan Patel,rohan.patel33@quantumcod.com,Quantum Code Works,large,Tech,+91 90114 76747,customer,2023-05-28
+34,Siddharth Saxena,siddharth.saxena34@bytewaveso.com,ByteWave Software,small,Tech,+91 92044 26623,customer,2023-12-06
+35,Sneha Bhat,sneha.bhat35@medpulseph.com,MedPulse Pharma,small,Health,+91 95450 37358,customer,2023-02-04
+36,Priya Kulkarni,priya.kulkarni36@lifelineca.com,LifeLine Care,small,Health,+91 90303 45478,customer,2023-09-30
+37,Swati Verma,swati.verma37@finedgecap.com,FinEdge Capital Advisors,medium,Finance,+91 95765 26089,customer,2023-01-07
+38,Priya Reddy,priya.reddy38@bytewaveso.com,ByteWave Software,large,Tech,+91 95707 19034,customer,2023-10-27
+39,Arjun Verma,arjun.verma39@lifelineca.com,LifeLine Care,small,Health,+91 99714 52022,customer,2023-05-05
+40,Rohan Singhania,rohan.singhania40@apollocare.com,Apollo Care Clinics,medium,Health,+91 92945 42016,customer,2023-08-12
+41,Swati Reddy,swati.reddy41@medpulseph.com,MedPulse Pharma,medium,Health,+91 93237 96178,customer,2023-08-29
+42,Manish Mehta,manish.mehta42@vanguardfi.com,Vanguard FinTech,large,Finance,+91 96062 43534,customer,2023-11-17
+43,Ananya Verma,ananya.verma43@quickmarts.com,QuickMart Supermarket,large,Retail,+91 93468 19061,customer,2023-05-02
+44,Deepak Gupta,deepak.gupta44@medpulseph.com,MedPulse Pharma,small,Health,+91 91902 18890,customer,2023-02-01
+45,Rahul Pillai,rahul.pillai45@apollocare.com,Apollo Care Clinics,small,Health,+91 93839 41480,customer,2023-01-29
+46,Ananya Bhat,ananya.bhat46@metrofashi.com,Metro Fashion Retail,medium,Retail,+91 95991 25537,customer,2023-07-03
+47,Siddharth Pillai,siddharth.pillai47@vectorlogi.com,Vector Logic Labs,small,Tech,+91 90683 43037,customer,2023-05-29
+48,Aarav Menon,aarav.menon48@apexsupers.com,Apex Superstores,medium,Retail,+91 93238 92195,customer,2023-06-05
+49,Swati Joshi,swati.joshi49@nexuswealt.com,Nexus Wealth,small,Finance,+91 92715 25438,customer,2023-02-08
+50,Rahul Kulkarni,rahul.kulkarni50@hypersyncs.com,HyperSync Systems,large,Tech,+91 90219 49229,customer,2023-06-26
+51,Aditya Sharma,aditya.sharma51@trustpayle.com,TrustPay Ledger Systems,small,Finance,+91 91811 18090,customer,2023-06-09
+52,Sneha Reddy,sneha.reddy52@nextgenail.com,NextGen AI Labs,medium,Tech,+91 91786 67540,customer,2023-08-05
+53,Swati Kulkarni,swati.kulkarni53@finedgecap.com,FinEdge Capital Advisors,large,Finance,+91 98875 75334,customer,2023-01-09
+54,Divya Kulkarni,divya.kulkarni54@hypersyncs.com,HyperSync Systems,large,Tech,+91 99423 69976,customer,2023-07-04
+55,Divya Mehta,divya.mehta55@finedgecap.com,FinEdge Capital Advisors,medium,Finance,+91 90198 53117,customer,2023-10-17
+56,Priya Patel,priya.patel56@primeessen.com,Prime Essentials,medium,Retail,+91 97998 27905,customer,2023-08-19
+57,Meera Gupta,meera.gupta57@quickmarts.com,QuickMart Supermarket,medium,Retail,+91 96143 65911,customer,2023-08-22
+58,Rohan Malhotra,rohan.malhotra58@healthfirs.com,HealthFirst Hospital,large,Health,+91 90669 92642,customer,2023-04-08
+59,Aditya Reddy,aditya.reddy59@quantumcod.com,Quantum Code Works,medium,Tech,+91 97686 70606,customer,2023-09-28
+60,Aarav Bhat,aarav.bhat60@nextgenail.com,NextGen AI Labs,medium,Tech,+91 94858 15687,customer,2023-08-15
+61,Suresh Chopra,suresh.chopra61@apexdiagno.com,Apex Diagnostic Labs,large,Health,+91 94924 16810,customer,2023-11-27
+62,Divya Sharma,divya.sharma62@quickmarts.com,QuickMart Supermarket,small,Retail,+91 90587 70360,customer,2023-08-14
+63,Rahul Patel,rahul.patel63@dailyneeds.com,DailyNeeds Store,large,Retail,+91 92186 83520,customer,2023-01-07
+64,Divya Mehta,divya.mehta64@lifelineca.com,LifeLine Care,small,Health,+91 95697 69651,customer,2023-04-29
+65,Suresh Mehta,suresh.mehta65@apollocare.com,Apollo Care Clinics,small,Health,+91 96492 69940,customer,2023-12-24
+66,Ritu Menon,ritu.menon66@nextgenail.com,NextGen AI Labs,large,Tech,+91 93163 54833,customer,2023-07-19
+67,Rahul Das,rahul.das67@nexuswealt.com,Nexus Wealth,medium,Finance,+91 91100 38054,customer,2023-09-10
+68,Ananya Kulkarni,ananya.kulkarni68@lifelineca.com,LifeLine Care,medium,Health,+91 98286 91669,customer,2023-06-20
+69,Siddharth Kulkarni,siddharth.kulkarni69@apexsupers.com,Apex Superstores,medium,Retail,+91 98257 63233,customer,2023-04-23
+70,Suresh Mehta,suresh.mehta70@finedgecap.com,FinEdge Capital Advisors,large,Finance,+91 93639 32489,customer,2023-04-02
+71,Ritu Verma,ritu.verma71@lifelineca.com,LifeLine Care,small,Health,+91 99967 32132,customer,2023-09-12
+72,Sneha Das,sneha.das72@carebridge.com,CareBridge Health,medium,Health,+91 96941 94999,customer,2023-05-03
+73,Aarav Singhania,aarav.singhania73@finedgecap.com,FinEdge Capital Advisors,medium,Finance,+91 99440 82379,customer,2023-01-26
+74,Swati Rao,swati.rao74@apollocare.com,Apollo Care Clinics,large,Health,+91 93216 32611,customer,2023-01-25
+75,Manish Malhotra,manish.malhotra75@primeessen.com,Prime Essentials,medium,Retail,+91 95341 80111,customer,2023-07-01
+76,Manish Nair,manish.nair76@vectorlogi.com,Vector Logic Labs,small,Tech,+91 92806 54130,customer,2023-05-24
+77,Sneha Menon,sneha.menon77@vanguardfi.com,Vanguard FinTech,medium,Finance,+91 99795 50725,customer,2023-06-05
+78,Aarav Joshi,aarav.joshi78@vectorlogi.com,Vector Logic Labs,large,Tech,+91 99122 94547,customer,2023-02-20
+79,Siddharth Chopra,siddharth.chopra79@primeessen.com,Prime Essentials,large,Retail,+91 95107 94733,customer,2023-12-28
+80,Manish Deshmukh,manish.deshmukh80@trustpayle.com,TrustPay Ledger Systems,large,Finance,+91 93304 21307,customer,2023-11-11
+81,Vikram Reddy,vikram.reddy81@primeessen.com,Prime Essentials,small,Retail,+91 97112 17513,customer,2023-07-11
+82,Aarav Malhotra,aarav.malhotra82@trustpayle.com,TrustPay Ledger Systems,medium,Finance,+91 92114 89053,customer,2023-09-05
+83,Suresh Pillai,suresh.pillai83@healthfirs.com,HealthFirst Hospital,large,Health,+91 93635 89347,customer,2023-03-10
+84,Ritu Kulkarni,ritu.kulkarni84@apexsupers.com,Apex Superstores,small,Retail,+91 97515 43222,customer,2023-09-23
+85,Vikram Sharma,vikram.sharma85@bytewaveso.com,ByteWave Software,small,Tech,+91 92205 10851,customer,2023-04-23
+86,Neha Saxena,neha.saxena86@lifelineca.com,LifeLine Care,medium,Health,+91 97217 29808,customer,2023-05-12
+87,Divya Saxena,divya.saxena87@apexsupers.com,Apex Superstores,medium,Retail,+91 94683 98445,customer,2023-08-19
+88,Arjun Kulkarni,arjun.kulkarni88@quantumcod.com,Quantum Code Works,small,Tech,+91 93838 23880,customer,2023-11-01
+89,Deepak Bhat,deepak.bhat89@nextgenail.com,NextGen AI Labs,medium,Tech,+91 93924 96814,customer,2023-07-20
+90,Priya Bhat,priya.bhat90@quickmarts.com,QuickMart Supermarket,large,Retail,+91 98614 81256,customer,2023-02-09
+91,Vikram Das,vikram.das91@bytewaveso.com,ByteWave Software,small,Tech,+91 91467 37176,customer,2023-01-14
+92,Ananya Nair,ananya.nair92@trustpayle.com,TrustPay Ledger Systems,large,Finance,+91 91230 54067,customer,2023-07-07
+93,Sneha Iyer,sneha.iyer93@dailyneeds.com,DailyNeeds Store,small,Retail,+91 94209 17303,customer,2023-03-22
+94,Divya Singhania,divya.singhania94@nexuswealt.com,Nexus Wealth,medium,Finance,+91 90576 54577,customer,2023-06-06
+95,Arjun Nair,arjun.nair95@medpulseph.com,MedPulse Pharma,medium,Health,+91 92833 71032,customer,2023-06-20
+96,Sneha Verma,sneha.verma96@vectorlogi.com,Vector Logic Labs,small,Tech,+91 98304 31872,customer,2023-05-29
+97,Kavya Kulkarni,kavya.kulkarni97@nextgenail.com,NextGen AI Labs,medium,Tech,+91 97636 45476,customer,2023-08-08
+98,Meera Gupta,meera.gupta98@medpulseph.com,MedPulse Pharma,large,Health,+91 91174 17759,customer,2023-06-25
+99,Rohan Chopra,rohan.chopra99@finedgecap.com,FinEdge Capital Advisors,medium,Finance,+91 95810 60258,customer,2023-12-28
+100,Swati Kulkarni,swati.kulkarni100@carebridge.com,CareBridge Health,small,Health,+91 94910 80340,customer,2023-10-23

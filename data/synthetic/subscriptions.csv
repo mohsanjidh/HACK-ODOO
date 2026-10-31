@@ -1,0 +1,101 @@
+id,subscription_number,customer_id,customer_name,customer_email,plan_id,plan_name,variant_name,quantity,unit_price,tax_amount,total_amount,status,start_date,expiry_date
+1,SUB-1001,38,Priya Reddy,priya.reddy38@bytewaveso.com,6,Tech Enterprise Cloud,Single Terminal,15,120000.0,324000.0,2124000.0,Closed,2026-06-29,2027-06-29
+2,SUB-1002,54,Divya Kulkarni,divya.kulkarni54@hypersyncs.com,8,Daily Sandbox Access,Odoo Brand Integration,7,659.0,830.34,5443.34,Draft,2026-05-27,2026-05-28
+3,SUB-1003,99,Rohan Chopra,rohan.chopra99@finedgecap.com,1,Retail POS Starter,Odoo Brand Integration,1,2559.0,460.62,3019.62,Quotation,2026-02-08,2026-03-10
+4,SUB-1004,13,Vikram Mehta,vikram.mehta13@nextgenail.com,4,Healthcare Enterprise Annual,Multi-Counter Sync,10,90740.0,163332.0,1070732.0,Active,2026-05-30,2027-05-30
+5,SUB-1005,13,Vikram Mehta,vikram.mehta13@nextgenail.com,8,Daily Sandbox Access,Single Terminal,3,99.0,53.46,350.46,Active,2026-09-23,2026-10-24
+6,SUB-1006,13,Vikram Mehta,vikram.mehta13@nextgenail.com,7,Weekly Sprint Pass,Single Terminal,6,499.0,538.92,3532.92,Active,2026-10-03,2026-10-10
+7,SUB-1007,95,Arjun Nair,arjun.nair95@medpulseph.com,7,Weekly Sprint Pass,White-Label Enterprise,9,1999.0,3238.38,21229.38,Quotation,2026-01-24,2026-01-31
+8,SUB-1008,10,Rohan Joshi,rohan.joshi10@vanguardfi.com,8,Daily Sandbox Access,Standard Brand,8,99.0,142.56,934.56,Active,2026-05-31,2026-11-02
+9,SUB-1009,91,Vikram Das,vikram.das91@bytewaveso.com,3,Healthcare Clinic Suite,Multi-Counter Sync,3,5749.0,3104.46,20351.46,Closed,2026-01-12,2026-02-11
+10,SUB-1010,92,Ananya Nair,ananya.nair92@trustpayle.com,3,Healthcare Clinic Suite,White-Label Enterprise,3,6499.0,3509.46,23006.46,Confirmed,2026-08-20,2026-09-19
+11,SUB-1011,25,Ananya Nair,ananya.nair25@apollocare.com,7,Weekly Sprint Pass,Odoo Brand Integration,5,1059.0,953.1,6248.1,Draft,2026-01-07,2026-01-14
+12,SUB-1012,36,Priya Kulkarni,priya.kulkarni36@lifelineca.com,1,Retail POS Starter,Odoo Brand Integration,8,2559.0,3684.96,24156.96,Active,2026-09-22,2026-10-29
+13,SUB-1013,70,Suresh Mehta,suresh.mehta70@finedgecap.com,5,Finance Ledger Pro,Multi-Counter Sync,2,4249.0,1529.64,10027.64,Closed,2026-09-24,2026-10-24
+14,SUB-1014,48,Aarav Menon,aarav.menon48@apexsupers.com,3,Healthcare Clinic Suite,Standard Brand,10,4999.0,8998.2,58988.2,Quotation,2026-08-07,2026-09-06
+15,SUB-1015,93,Sneha Iyer,sneha.iyer93@dailyneeds.com,1,Retail POS Starter,Multi-Counter Sync,9,2749.0,4453.38,29194.38,Draft,2026-03-10,2026-04-09
+16,SUB-1016,41,Swati Reddy,swati.reddy41@medpulseph.com,7,Weekly Sprint Pass,Multi-Counter Sync,1,1249.0,224.82,1473.82,Quotation,2026-08-30,2026-09-06
+17,SUB-1017,48,Aarav Menon,aarav.menon48@apexsupers.com,1,Retail POS Starter,Single Terminal,3,1999.0,1079.46,7076.46,Closed,2026-01-04,2026-02-03
+18,SUB-1018,97,Kavya Kulkarni,kavya.kulkarni97@nextgenail.com,7,Weekly Sprint Pass,Standard Brand,3,499.0,269.46,1766.46,Draft,2026-02-26,2026-03-05
+19,SUB-1019,74,Swati Rao,swati.rao74@apollocare.com,1,Retail POS Starter,Standard Brand,5,1999.0,1799.1,11794.1,Active,2026-03-04,2026-10-28
+20,SUB-1020,60,Aarav Bhat,aarav.bhat60@nextgenail.com,5,Finance Ledger Pro,Standard Brand,9,3499.0,5668.38,37159.38,Quotation,2026-05-27,2026-06-26
+21,SUB-1021,40,Rohan Singhania,rohan.singhania40@apollocare.com,5,Finance Ledger Pro,Single Terminal,10,3499.0,6298.2,41288.2,Draft,2026-03-15,2026-04-14
+22,SUB-1022,49,Swati Joshi,swati.joshi49@nexuswealt.com,3,Healthcare Clinic Suite,Odoo Brand Integration,3,5559.0,3001.86,19678.86,Active,2026-09-14,2026-11-01
+23,SUB-1023,40,Rohan Singhania,rohan.singhania40@apollocare.com,2,Retail POS Annual,Standard Brand,6,19990.0,21589.2,141529.2,Draft,2026-06-17,2027-06-17
+24,SUB-1024,30,Ananya Joshi,ananya.joshi30@dailyneeds.com,6,Tech Enterprise Cloud,Odoo Brand Integration,15,120560.0,325512.0,2133912.0,Draft,2026-07-18,2027-07-18
+25,SUB-1025,51,Aditya Sharma,aditya.sharma51@trustpayle.com,3,Healthcare Clinic Suite,White-Label Enterprise,3,6499.0,3509.46,23006.46,Draft,2026-08-06,2026-09-05
+26,SUB-1026,46,Ananya Bhat,ananya.bhat46@metrofashi.com,1,Retail POS Starter,Odoo Brand Integration,8,2559.0,3684.96,24156.96,Closed,2026-09-23,2026-10-23
+27,SUB-1027,45,Rahul Pillai,rahul.pillai45@apollocare.com,3,Healthcare Clinic Suite,Odoo Brand Integration,3,5559.0,3001.86,19678.86,Draft,2026-07-18,2026-08-17
+28,SUB-1028,15,Ritu Saxena,ritu.saxena15@primeessen.com,2,Retail POS Annual,Single Terminal,3,19990.0,10794.6,70764.6,Active,2026-01-29,2026-10-26
+29,SUB-1029,55,Divya Mehta,divya.mehta55@finedgecap.com,1,Retail POS Starter,Single Terminal,8,1999.0,2878.56,18870.56,Active,2026-02-20,2026-03-22
+30,SUB-1030,6,Deepak Nair,deepak.nair6@dailyneeds.com,5,Finance Ledger Pro,Single Terminal,6,3499.0,3778.92,24772.92,Draft,2026-06-20,2026-07-20
+31,SUB-1031,92,Ananya Nair,ananya.nair92@trustpayle.com,4,Healthcare Enterprise Annual,White-Label Enterprise,10,91490.0,164682.0,1079582.0,Active,2026-10-18,2027-10-18
+32,SUB-1032,23,Kavya Das,kavya.das23@trustpayle.com,6,Tech Enterprise Cloud,Odoo Brand Integration,15,120560.0,325512.0,2133912.0,Active,2026-05-08,2027-05-08
+33,SUB-1033,4,Arjun Nair,arjun.nair4@quickmarts.com,3,Healthcare Clinic Suite,White-Label Enterprise,10,6499.0,11698.2,76688.2,Confirmed,2026-04-18,2026-05-18
+34,SUB-1034,88,Arjun Kulkarni,arjun.kulkarni88@quantumcod.com,5,Finance Ledger Pro,Standard Brand,7,3499.0,4408.74,28901.74,Active,2026-01-27,2026-02-26
+35,SUB-1035,92,Ananya Nair,ananya.nair92@trustpayle.com,4,Healthcare Enterprise Annual,White-Label Enterprise,10,91490.0,164682.0,1079582.0,Active,2026-08-05,2027-08-05
+36,SUB-1036,5,Neha Das,neha.das5@dailyneeds.com,8,Daily Sandbox Access,Standard Brand,6,99.0,106.92,700.92,Active,2026-10-03,2026-11-04
+37,SUB-1037,99,Rohan Chopra,rohan.chopra99@finedgecap.com,8,Daily Sandbox Access,Odoo Brand Integration,6,659.0,711.72,4665.72,Confirmed,2026-02-23,2026-02-24
+38,SUB-1038,3,Kavya Deshmukh,kavya.deshmukh3@urbanfresh.com,7,Weekly Sprint Pass,White-Label Enterprise,8,1999.0,2878.56,18870.56,Active,2026-02-08,2026-02-15
+39,SUB-1039,63,Rahul Patel,rahul.patel63@dailyneeds.com,6,Tech Enterprise Cloud,White-Label Enterprise,15,121500.0,328050.0,2150550.0,Closed,2026-10-21,2027-10-21
+40,SUB-1040,40,Rohan Singhania,rohan.singhania40@apollocare.com,8,Daily Sandbox Access,Standard Brand,5,99.0,89.1,584.1,Draft,2026-04-19,2026-04-20
+41,SUB-1041,4,Arjun Nair,arjun.nair4@quickmarts.com,6,Tech Enterprise Cloud,Standard Brand,15,120000.0,324000.0,2124000.0,Draft,2026-06-13,2027-06-13
+42,SUB-1042,17,Pooja Saxena,pooja.saxena17@quantumcod.com,8,Daily Sandbox Access,Odoo Brand Integration,10,659.0,1186.2,7776.2,Active,2026-05-26,2026-05-27
+43,SUB-1043,66,Ritu Menon,ritu.menon66@nextgenail.com,4,Healthcare Enterprise Annual,White-Label Enterprise,10,91490.0,164682.0,1079582.0,Quotation,2026-06-30,2027-06-30
+44,SUB-1044,95,Arjun Nair,arjun.nair95@medpulseph.com,5,Finance Ledger Pro,Single Terminal,6,3499.0,3778.92,24772.92,Active,2026-05-07,2026-06-06
+45,SUB-1045,63,Rahul Patel,rahul.patel63@dailyneeds.com,3,Healthcare Clinic Suite,Odoo Brand Integration,8,5559.0,8004.96,52476.96,Active,2026-03-28,2026-10-24
+46,SUB-1046,21,Deepak Menon,deepak.menon21@apexdiagno.com,4,Healthcare Enterprise Annual,Standard Brand,10,89990.0,161982.0,1061882.0,Closed,2026-05-19,2027-05-19
+47,SUB-1047,11,Ananya Pillai,ananya.pillai11@bytewaveso.com,2,Retail POS Annual,White-Label Enterprise,8,21490.0,30945.6,202865.6,Active,2026-08-08,2027-08-08
+48,SUB-1048,15,Ritu Saxena,ritu.saxena15@primeessen.com,7,Weekly Sprint Pass,Single Terminal,9,499.0,808.38,5299.38,Active,2026-05-30,2026-06-06
+49,SUB-1049,32,Priya Menon,priya.menon32@dailyneeds.com,8,Daily Sandbox Access,Single Terminal,10,99.0,178.2,1168.2,Active,2026-04-17,2026-04-18
+50,SUB-1050,61,Suresh Chopra,suresh.chopra61@apexdiagno.com,2,Retail POS Annual,Multi-Counter Sync,6,20740.0,22399.2,146839.2,Active,2026-03-20,2027-03-20
+51,SUB-1051,7,Swati Saxena,swati.saxena7@urbanfresh.com,5,Finance Ledger Pro,Odoo Brand Integration,2,4059.0,1461.24,9579.24,Active,2026-08-11,2026-09-10
+52,SUB-1052,87,Divya Saxena,divya.saxena87@apexsupers.com,6,Tech Enterprise Cloud,Standard Brand,15,120000.0,324000.0,2124000.0,Closed,2026-05-06,2027-05-06
+53,SUB-1053,54,Divya Kulkarni,divya.kulkarni54@hypersyncs.com,2,Retail POS Annual,White-Label Enterprise,7,21490.0,27077.4,177507.4,Active,2026-03-20,2027-03-20
+54,SUB-1054,89,Deepak Bhat,deepak.bhat89@nextgenail.com,3,Healthcare Clinic Suite,Standard Brand,5,4999.0,4499.1,29494.1,Active,2026-01-09,2026-02-08
+55,SUB-1055,39,Arjun Verma,arjun.verma39@lifelineca.com,5,Finance Ledger Pro,White-Label Enterprise,5,4999.0,4499.1,29494.1,Confirmed,2026-03-28,2026-04-27
+56,SUB-1056,5,Neha Das,neha.das5@dailyneeds.com,6,Tech Enterprise Cloud,Standard Brand,15,120000.0,324000.0,2124000.0,Confirmed,2026-05-11,2027-05-11
+57,SUB-1057,66,Ritu Menon,ritu.menon66@nextgenail.com,6,Tech Enterprise Cloud,Standard Brand,15,120000.0,324000.0,2124000.0,Active,2026-08-08,2027-08-08
+58,SUB-1058,49,Swati Joshi,swati.joshi49@nexuswealt.com,6,Tech Enterprise Cloud,Single Terminal,15,120000.0,324000.0,2124000.0,Active,2026-05-15,2027-05-15
+59,SUB-1059,5,Neha Das,neha.das5@dailyneeds.com,1,Retail POS Starter,Standard Brand,3,1999.0,1079.46,7076.46,Active,2026-08-19,2026-09-18
+60,SUB-1060,94,Divya Singhania,divya.singhania94@nexuswealt.com,4,Healthcare Enterprise Annual,Multi-Counter Sync,10,90740.0,163332.0,1070732.0,Draft,2026-07-26,2027-07-26
+61,SUB-1061,52,Sneha Reddy,sneha.reddy52@nextgenail.com,2,Retail POS Annual,Single Terminal,10,19990.0,35982.0,235882.0,Closed,2026-05-17,2027-05-17
+62,SUB-1062,43,Ananya Verma,ananya.verma43@quickmarts.com,7,Weekly Sprint Pass,Odoo Brand Integration,5,1059.0,953.1,6248.1,Active,2026-03-06,2026-03-13
+63,SUB-1063,92,Ananya Nair,ananya.nair92@trustpayle.com,1,Retail POS Starter,Odoo Brand Integration,3,2559.0,1381.86,9058.86,Active,2026-09-16,2026-10-16
+64,SUB-1064,90,Priya Bhat,priya.bhat90@quickmarts.com,8,Daily Sandbox Access,Single Terminal,10,99.0,178.2,1168.2,Confirmed,2026-07-06,2026-07-07
+65,SUB-1065,77,Sneha Menon,sneha.menon77@vanguardfi.com,5,Finance Ledger Pro,White-Label Enterprise,10,4999.0,8998.2,58988.2,Active,2026-04-14,2026-05-14
+66,SUB-1066,66,Ritu Menon,ritu.menon66@nextgenail.com,8,Daily Sandbox Access,White-Label Enterprise,2,1599.0,575.64,3773.64,Draft,2026-05-11,2026-05-12
+67,SUB-1067,33,Rohan Patel,rohan.patel33@quantumcod.com,2,Retail POS Annual,White-Label Enterprise,4,21490.0,15472.8,101432.8,Closed,2026-08-10,2027-08-10
+68,SUB-1068,4,Arjun Nair,arjun.nair4@quickmarts.com,3,Healthcare Clinic Suite,Odoo Brand Integration,10,5559.0,10006.2,65596.2,Closed,2026-01-11,2026-02-10
+69,SUB-1069,19,Aarav Kulkarni,aarav.kulkarni19@urbanfresh.com,6,Tech Enterprise Cloud,Multi-Counter Sync,15,120750.0,326025.0,2137275.0,Draft,2026-10-01,2027-10-01
+70,SUB-1070,54,Divya Kulkarni,divya.kulkarni54@hypersyncs.com,4,Healthcare Enterprise Annual,Odoo Brand Integration,10,90550.0,162990.0,1068490.0,Active,2026-04-27,2027-04-27
+71,SUB-1071,4,Arjun Nair,arjun.nair4@quickmarts.com,3,Healthcare Clinic Suite,Multi-Counter Sync,7,5749.0,7243.74,47486.74,Closed,2026-02-06,2026-03-08
+72,SUB-1072,37,Swati Verma,swati.verma37@finedgecap.com,3,Healthcare Clinic Suite,White-Label Enterprise,3,6499.0,3509.46,23006.46,Closed,2026-03-08,2026-04-07
+73,SUB-1073,31,Ritu Patel,ritu.patel31@cloudscale.com,8,Daily Sandbox Access,Single Terminal,3,99.0,53.46,350.46,Active,2026-10-10,2026-10-11
+74,SUB-1074,78,Aarav Joshi,aarav.joshi78@vectorlogi.com,5,Finance Ledger Pro,Multi-Counter Sync,8,4249.0,6118.56,40110.56,Confirmed,2026-02-02,2026-03-04
+75,SUB-1075,49,Swati Joshi,swati.joshi49@nexuswealt.com,4,Healthcare Enterprise Annual,White-Label Enterprise,10,91490.0,164682.0,1079582.0,Active,2026-07-28,2027-07-28
+76,SUB-1076,28,Aditya Saxena,aditya.saxena28@nexuswealt.com,5,Finance Ledger Pro,Multi-Counter Sync,3,4249.0,2294.46,15041.46,Closed,2026-04-21,2026-05-21
+77,SUB-1077,83,Suresh Pillai,suresh.pillai83@healthfirs.com,4,Healthcare Enterprise Annual,Single Terminal,10,89990.0,161982.0,1061882.0,Active,2026-05-19,2027-05-19
+78,SUB-1078,94,Divya Singhania,divya.singhania94@nexuswealt.com,3,Healthcare Clinic Suite,Multi-Counter Sync,7,5749.0,7243.74,47486.74,Draft,2026-03-06,2026-04-05
+79,SUB-1079,90,Priya Bhat,priya.bhat90@quickmarts.com,7,Weekly Sprint Pass,Multi-Counter Sync,1,1249.0,224.82,1473.82,Active,2026-10-13,2026-10-20
+80,SUB-1080,33,Rohan Patel,rohan.patel33@quantumcod.com,2,Retail POS Annual,Standard Brand,2,19990.0,7196.4,47176.4,Quotation,2026-04-13,2027-04-13
+81,SUB-1081,1,Meera Bhat,meera.bhat1@sterlingca.com,7,Weekly Sprint Pass,White-Label Enterprise,1,1999.0,359.82,2358.82,Active,2026-01-30,2026-02-06
+82,SUB-1082,1,Meera Bhat,meera.bhat1@sterlingca.com,1,Retail POS Starter,Multi-Counter Sync,9,2749.0,4453.38,29194.38,Draft,2026-03-19,2026-04-18
+83,SUB-1083,8,Neha Nair,neha.nair8@apexsupers.com,6,Tech Enterprise Cloud,Multi-Counter Sync,15,120750.0,326025.0,2137275.0,Draft,2026-03-10,2027-03-10
+84,SUB-1084,81,Vikram Reddy,vikram.reddy81@primeessen.com,7,Weekly Sprint Pass,Odoo Brand Integration,8,1059.0,1524.96,9996.96,Draft,2026-03-24,2026-03-31
+85,SUB-1085,71,Ritu Verma,ritu.verma71@lifelineca.com,2,Retail POS Annual,Odoo Brand Integration,1,20550.0,3699.0,24249.0,Closed,2026-03-26,2027-03-26
+86,SUB-1086,22,Meera Singhania,meera.singhania22@apexsupers.com,8,Daily Sandbox Access,White-Label Enterprise,2,1599.0,575.64,3773.64,Quotation,2026-04-01,2026-04-02
+87,SUB-1087,94,Divya Singhania,divya.singhania94@nexuswealt.com,7,Weekly Sprint Pass,Standard Brand,4,499.0,359.28,2355.28,Closed,2026-04-25,2026-05-02
+88,SUB-1088,26,Swati Kulkarni,swati.kulkarni26@bytewaveso.com,3,Healthcare Clinic Suite,Standard Brand,3,4999.0,2699.46,17696.46,Active,2026-09-13,2026-10-13
+89,SUB-1089,76,Manish Nair,manish.nair76@vectorlogi.com,2,Retail POS Annual,Multi-Counter Sync,1,20740.0,3733.2,24473.2,Active,2026-04-02,2027-04-02
+90,SUB-1090,84,Ritu Kulkarni,ritu.kulkarni84@apexsupers.com,4,Healthcare Enterprise Annual,Single Terminal,10,89990.0,161982.0,1061882.0,Active,2026-07-05,2027-07-05
+91,SUB-1091,93,Sneha Iyer,sneha.iyer93@dailyneeds.com,8,Daily Sandbox Access,Odoo Brand Integration,6,659.0,711.72,4665.72,Active,2026-08-04,2026-08-05
+92,SUB-1092,48,Aarav Menon,aarav.menon48@apexsupers.com,3,Healthcare Clinic Suite,Multi-Counter Sync,8,5749.0,8278.56,54270.56,Active,2026-07-18,2026-08-17
+93,SUB-1093,50,Rahul Kulkarni,rahul.kulkarni50@hypersyncs.com,6,Tech Enterprise Cloud,Standard Brand,15,120000.0,324000.0,2124000.0,Quotation,2026-06-21,2027-06-21
+94,SUB-1094,74,Swati Rao,swati.rao74@apollocare.com,2,Retail POS Annual,Single Terminal,3,19990.0,10794.6,70764.6,Active,2026-03-14,2027-03-14
+95,SUB-1095,1,Meera Bhat,meera.bhat1@sterlingca.com,8,Daily Sandbox Access,Standard Brand,3,99.0,53.46,350.46,Active,2026-03-12,2026-03-13
+96,SUB-1096,50,Rahul Kulkarni,rahul.kulkarni50@hypersyncs.com,7,Weekly Sprint Pass,Single Terminal,7,499.0,628.74,4121.74,Closed,2026-04-28,2026-05-05
+97,SUB-1097,41,Swati Reddy,swati.reddy41@medpulseph.com,8,Daily Sandbox Access,Single Terminal,6,99.0,106.92,700.92,Active,2026-02-20,2026-02-21
+98,SUB-1098,31,Ritu Patel,ritu.patel31@cloudscale.com,7,Weekly Sprint Pass,Standard Brand,7,499.0,628.74,4121.74,Closed,2026-06-15,2026-06-22
+99,SUB-1099,81,Vikram Reddy,vikram.reddy81@primeessen.com,6,Tech Enterprise Cloud,White-Label Enterprise,15,121500.0,328050.0,2150550.0,Confirmed,2026-03-26,2027-03-26
+100,SUB-1100,70,Suresh Mehta,suresh.mehta70@finedgecap.com,5,Finance Ledger Pro,White-Label Enterprise,8,4999.0,7198.56,47190.56,Active,2026-02-27,2026-03-29
