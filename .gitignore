@@ -59,4 +59,6 @@ htmlcov/
 
 # ── Internal files (not for repo) ──
 HACK_LOG.md
+clone/
+/clone/
 
