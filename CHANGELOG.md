@@ -11,15 +11,20 @@ All team members must log every code change, module creation, and bug fix here p
 
 ---
 
-## 🛠️ Dharshin R (Data Models, Lifecycle & Billing Engine)
+## 🛠️ Dharshin R (Admin & Staff Backend, Data Models & Architecture)
 
 - **[10:42 AM]** Added official hackathon reference documentation in `docs/`:
   - `PROBLEM_STATEMENT.md`: Complete Brightloop Software requirements and scenes.
   - `EVALUATION_CRITERIA.md`: Mandatory Must-Have, Nice-to-Have, and evaluator rules (single branch `main`, hourly commits).
+- **[11:55 AM]** Restructured `IMPLEMENTATION_PLAN.md` based on team alignment:
+  - Created `data/synthetic/` directory for Mrinal's dataset.
+  - Allocated Admin & Staff backend engines to Dharshin.
+  - Allocated User/Customer backend & DB Seeder to Mrinal.
+  - Allocated responsive 3-page UI system to Haritha.
 
 ---
 
-## 🔐 MRINAL V (Authentication, RBAC, Taxes & Discounts)
+## 🔐 MRINAL V (Synthetic Data, DB Seeder & User Portal Backend)
 
 *(Add your entries below as you develop)*
 

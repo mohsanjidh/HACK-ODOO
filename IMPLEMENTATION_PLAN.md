@@ -1,155 +1,103 @@
 # 🚀 BRIGHTLOOP SUBSCRIPTION MANAGEMENT SYSTEM
-## Team Implementation Plan & Work Distribution
+## Updated Team Implementation Plan & Work Distribution
 **Event:** Odoo x Make-A-Ton 9.0 Kochi Hackathon 2026  
 **Repository:** https://github.com/mohsanjidh/HACK-ODOO.git  
-**Target Branch:** `main` (STRICT: All work on `main`, no secondary branches!)
+**Target Branch:** `main` (Strict: All work lands on `main`!)
 
 ---
 
-## ⚠️ MANDATORY HEADS-UP INSTRUCTIONS (READ FIRST!)
-
-Welcome team! Please follow these exact steps before writing a single line of code:
-
-### 1. Repository Setup & Clone
-```bash
-git clone https://github.com/mohsanjidh/HACK-ODOO.git
-cd HACK-ODOO
-```
-
-### 2. Configure Your Git Identity (CRITICAL FOR Q&A EVALUATION)
-The evaluators (**mebh-odoo** / **hackathon-odoo**) will inspect individual git commits and hold an afternoon Q&A based on **your specific commits**. Make sure your local git is configured with your name and GitHub email:
-```bash
-# Example for Mrinal:
-git config user.name "MRINAL V"
-git config user.email "<your-github-registered-email>"
-
-# Example for D Haritha:
-git config user.name "D Haritha"
-git config user.email "<your-github-registered-email>"
-```
-
-### 3. Hourly Commit & Push Rule (Official Hackathon Requirement)
-- You **MUST** commit and push your work to `main` **at least once every 1 hour**.
-- Always do `git pull --rebase origin main` before pushing to avoid conflicts.
-- Keep commits focused and clearly titled with your name (e.g. `feat(auth): add password regex validation [Mrinal]`).
-
-### 4. Strict Rule: Maintain `CHANGELOG.md`
-- Every time you build, edit, or fix a feature, **you MUST update `CHANGELOG.md`** under your designated section before committing.
-- Format: `[TIME] - [YOUR NAME]: Added <feature details> in <filename>`.
-- Code changes without a corresponding changelog entry are considered incomplete.
-
----
-
-## 👥 MODULE OWNERSHIP & FILE ASSIGNMENTS
-
-To avoid merge conflicts, every member has exclusive ownership over specific files and services. Do not edit another member's files without coordinating!
+## 📂 PROJECT STRUCTURE & WORKSPACE LAYOUT
 
 ```
 HACK/
 ├── backend/
 │   ├── core/
-│   │   ├── config.py           ➔ [Mohammed Sanjidh S] App settings & CORS
-│   │   ├── database.py         ➔ [Mohammed Sanjidh S] SQLAlchemy engine & sessions
-│   │   ├── security.py         ➔ [Mohammed Sanjidh S] JWT tokens & Bcrypt hashing
-│   │   └── rbac.py             ➔ [MRINAL V] Role guards (Admin/Staff/Customer)
-│   ├── models/
-│   │   ├── user.py             ➔ [MRINAL V] User & Role models
-│   │   ├── tax.py              ➔ [MRINAL V] Tax rule definitions
-│   │   ├── discount.py         ➔ [MRINAL V] Discount rule models
-│   │   ├── product.py          ➔ [Dharshin R] Product & Variant (+ price deltas)
-│   │   ├── plan.py             ➔ [Dharshin R] Plan models & billing cycles
-│   │   ├── subscription.py     ➔ [Dharshin R] Subscriptions & line items
-│   │   ├── invoice.py          ➔ [Dharshin R] Invoices & tax totals
-│   │   └── payment.py          ➔ [Dharshin R] Payments & invoice matching
-│   ├── schemas/                ➔ [Shared by Owners] Pydantic request/response schemas
+│   │   ├── config.py           ➔ [Mohammed Sanjidh S] App settings, JWT secrets & CORS
+│   │   ├── database.py         ➔ [Dharshin R] SQLAlchemy 2.0 SQLite engine & sessions
+│   │   └── security.py         ➔ [Mohammed Sanjidh S] Bcrypt hashing & JWT utilities
+│   ├── models/                 ➔ [Dharshin R] Core DB Models (User, Product, Plan, Sub, Invoice, Payment, Discount, Tax)
+│   ├── schemas/                ➔ [Shared] Pydantic request/response validation schemas
 │   ├── services/
-│   │   ├── tax_engine.py       ➔ [MRINAL V] Automated tax calculation rules
-│   │   ├── discount_engine.py  ➔ [MRINAL V] Auto-apply discounts, limits, expiry
-│   │   ├── billing_engine.py   ➔ [Dharshin R] Batch billing run & anti-duplicate guard
-│   │   ├── lifecycle.py        ➔ [Dharshin R] Subscription state machine (Draft->Closed)
-│   │   └── payment_service.py  ➔ [Dharshin R] Payment recording & balance reconciliation
+│   │   ├── billing_engine.py   ➔ [Dharshin R] Automated batch billing run & idempotency guard
+│   │   ├── state_machine.py    ➔ [Dharshin R] Subscription lifecycle (Draft->Closed)
+│   │   └── discount_engine.py  ➔ [Dharshin R] Discount rules & tax calculations
 │   ├── routers/
-│   │   ├── auth.py             ➔ [MRINAL V] Register, Login, Password Reset
-│   │   ├── discounts.py        ➔ [MRINAL V] Admin discount rule CRUD
-│   │   ├── taxes.py            ➔ [MRINAL V] Admin tax rule CRUD
-│   │   ├── products.py         ➔ [Dharshin R] Product catalog & variants CRUD
-│   │   ├── plans.py            ➔ [Dharshin R] Plan definitions & lifecycle flags
-│   │   ├── subscriptions.py    ➔ [Dharshin R] Quotes, conversion, pause/renew
-│   │   ├── invoices.py         ➔ [Dharshin R] Due billing run, confirm, cancel, print
-│   │   ├── payments.py         ➔ [Dharshin R] Record incoming payment & match
-│   │   └── dashboard.py        ➔ [Dharshin R] Finance Lead metrics (MRR, ARR, overdue)
-│   ├── main.py                 ➔ [Mohammed Sanjidh S] FastAPI root app & routing
-│   └── requirements.txt        ➔ [Mohammed Sanjidh S] Python dependencies
+│   │   ├── admin.py            ➔ [Dharshin R] Admin APIs: Products, Plans, Taxes, Discounts, Finance Metrics
+│   │   ├── staff.py            ➔ [Dharshin R] Staff APIs: Subscription categorization, Expiry alerts, Invoicing run
+│   │   ├── user.py             ➔ [MRINAL V] Customer Portal APIs: Plan browsing, Checkout, Invoice history
+│   │   └── auth.py             ➔ [MRINAL V] Authentication & Password validation endpoints
+│   ├── main.py                 ➔ [Mohammed Sanjidh S] FastAPI root application
+│   └── requirements.txt        ➔ [Mohammed Sanjidh S] Pinned dependencies
+├── data/
+│   └── synthetic/              ➔ [MRINAL V] Synthetic Datasets (Customers, Plans, Subscriptions, Invoices CSVs)
+│       └── seed.py             ➔ [MRINAL V] Database loader & seeder script
 ├── frontend/
 │   ├── css/
-│   │   └── styles.css          ➔ [D Haritha] Design system (Teal theme, responsive)
+│   │   └── styles.css          ➔ [D Haritha] Responsive Teal design system & modern tables
 │   ├── js/
-│   │   ├── api.js              ➔ [D Haritha] Centralized fetch client & JWT storage
+│   │   ├── api.js              ➔ [D Haritha] Centralized Fetch API client
 │   │   ├── views/
-│   │   │   ├── auth.js         ➔ [D Haritha] Login / Register modal & password validator
-│   │   │   ├── catalog.js      ➔ [D Haritha] Product/Plan cards & variant pricing
-│   │   │   ├── subs.js         ➔ [D Haritha] Quotation builder & subscription manager
-│   │   │   ├── invoices.js     ➔ [D Haritha] Invoices list, billing trigger, payment modal
-│   │   │   ├── dashboard.js    ➔ [D Haritha] Finance Lead analytics & charts (<2s speed)
-│   │   │   └── portal.js       ➔ [D Haritha] Customer self-service dashboard
-│   │   └── app.js              ➔ [D Haritha] Navigation, role-based tab routing
-│   └── index.html              ➔ [D Haritha] Clean responsive SPA container
-├── IMPLEMENTATION_PLAN.md      ➔ [Team Master Plan]
-├── CHANGELOG.md                ➔ [Team Master Changelog]
-└── README.md                   ➔ [Mohammed Sanjidh S] Quickstart & verification
+│   │   │   ├── admin.js        ➔ [D Haritha] Admin UI: Plan creator, rule builder, financial charts
+│   │   │   ├── staff.js        ➔ [D Haritha] Staff UI: Email/Inbox style subscription table & renewal actions
+│   │   │   └── user.js         ➔ [D Haritha] Customer UI: Plan cards, checkout modal, receipt view
+│   │   └── app.js              ➔ [D Haritha] Routing & role switching shell
+│   └── index.html              ➔ [D Haritha] Single-page responsive container
+├── docs/
+│   ├── PROBLEM_STATEMENT.md    ➔ Official hackathon scenario
+│   └── EVALUATION_CRITERIA.md  ➔ Must-haves and judging scorecard
+├── IMPLEMENTATION_PLAN.md      ➔ Team Master Plan
+├── CHANGELOG.md                ➔ Mandatory Cross-Team Changelog
+└── README.md                   ➔ Quickstart guide & demo credentials
 ```
 
 ---
 
-## 🎯 INDIVIDUAL SCOPES & REQUIREMENTS
+## 👥 ROLE & FEATURE DISTRIBUTION
 
-### 1. Mohammed Sanjidh S (Architecture & Infrastructure)
-- [ ] Initialize FastAPI project structure with CORS and global error handlers.
-- [ ] Setup SQLite database with SQLAlchemy 2.0 sync session management.
-- [ ] Implement JWT token generation/decoding and bcrypt password hashing utilities.
-- [ ] Prepare `requirements.txt` and root `run.bat` for one-click startup.
-- [ ] Assemble `README.md` with setup guide, demo credentials, and architectural highlights.
+### 1. 🛠️ Dharshin R (Admin & Staff Backend Engines)
+* **Core Data Models (`backend/models/`)**:
+  - `User`, `Product`, `ProductVariant` (with price delta support, e.g. Odoo brand `+560`), `Plan`, `Subscription`, `Invoice`, `Payment`, `DiscountRule`, `TaxRule`.
+* **Admin Engine (`backend/routers/admin.py`)**:
+  - CRUD for Products, Plans, Variants, Taxes, and Discounts.
+  - Staff onboarding endpoint (*"Only admin can add new staff"*).
+  - Executive Finance Analytics: Total Revenue, Investments, Taxes collected, Discounts given, and Overdue Receivables (<2s speed).
+* **Staff Engine (`backend/routers/staff.py`)**:
+  - Subscription management with category filters (*Student, Family, Healthcare, Enterprise*).
+  - Expiry date tracking: Identify upcoming/past expirations and trigger simulated renewal reminders.
+  - Automated batch billing trigger (generates draft/confirmed invoices with zero manual typing).
 
-### 2. MRINAL V (Authentication, RBAC, Taxes & Discounts)
-- [ ] **Strict Password Rules**: Enforce regex (>8 chars, 1 uppercase, 1 lowercase, 1 special character) on registration.
-- [ ] **Unique Email Validation**: Prevent duplicate accounts.
-- [ ] **Password Reset Endpoint**: Mock secure token generation and email dispatch.
-- [ ] **Role Protection (RBAC)**: Admin (full access + create staff), Staff (operational), Customer (portal only).
-- [ ] **Admin Tax Engine**: Configurable tax rules (e.g. GST 18%, VAT 5%) applied automatically to invoices.
-- [ ] **Dynamic Discount Engine**: Fixed or percentage discounts, minimum quantity/spend thresholds, date validity, maximum usage caps, auto-apply on next billing cycle without manual effort.
+### 2. 🔐 MRINAL V (Synthetic Data, DB Seeder & User Portal Backend)
+* **Synthetic Dataset Creation (`data/synthetic/`)**:
+  - Create realistic CSV/JSON datasets for Customers, Plans, Subscriptions, and Invoices.
+* **Database Integration & Seeder (`data/synthetic/seed.py`)**:
+  - Write a Python script to populate the local SQLite database from the synthetic dataset on startup.
+* **Customer / User Backend (`backend/routers/user.py` & `auth.py`)**:
+  - Public Plan catalog endpoint.
+  - Subscription checkout & payment simulation.
+  - Invoice/Receipt history endpoint for customer self-service.
+  - User registration with strict password rules and unique email checks.
 
-### 3. Dharshin R (Product Catalog, State Machine, Billing & Finance)
-- [ ] **Product & Variants**: Base products + attribute variants with dynamic price deltas (e.g. Odoo brand adds +560).
-- [ ] **Subscription Plans**: Daily, Weekly, Monthly, Yearly cycles, min quantity, validity dates, auto-close / pause / renew flags.
-- [ ] **Quotation Templates**: Pre-configured product lines for fast quote generation.
-- [ ] **Subscription Lifecycle**: Strict state machine: `Draft` ➔ `Quotation` ➔ `Confirmed` ➔ `Active` ➔ `Closed`.
-- [ ] **Automated Billing Engine**: Idempotent batch billing run that generates invoices for all due active subscriptions with zero duplicates.
-- [ ] **Payment Reconciliation**: Record payment method, amount, date, and note; link directly to invoices and mark as `Paid`.
-- [ ] **Finance Lead Analytics**: Fast aggregation (<2s) of MRR, ARR, active subscriber count, and filterable overdue invoices list.
+### 3. 🎨 D HARITHA (Frontend UI & Templates)
+* **Design & Templates (`frontend/`)**:
+  - Unified Teal theme (`#017E84`) with responsive layout.
+  - **Admin View**: KPI cards (MRR, Total Revenue, Overdue debt) and plan configuration modals.
+  - **Staff View**: Clean **email/inbox-style** subscription list with status badges and quick renewal action buttons.
+  - **Customer View**: Interactive plan cards with Monthly/Yearly toggle, payment checkout modal, and offline-accessible printable receipts.
+* **Frontend-Backend Integration**:
+  - Connect the views to Dharshin's and Mrinal's FastAPI endpoints using `frontend/js/api.js`.
 
-### 4. D Haritha (Frontend UI, User Portals & Analytics Views)
-- [ ] **Responsive Design System**: Consistent Teal palette (`#017E84`), modern cards, accessible forms, clean typography.
-- [ ] **Auth & Role Shell**: Dynamic sidebar/navbar showing only permitted actions per role (Admin vs Staff vs Customer).
-- [ ] **Live Validation UI**: Visual checklist showing password requirements turning green as user types.
-- [ ] **Interactive Quotation & Plan Builder**: Variant picker updating prices in real-time.
-- [ ] **Billing Operations Panel**: One-click "Run Billing" button with real-time feedback and printable invoice preview.
-- [ ] **Finance Lead Dashboard**: High-impact KPI metric cards (MRR, Overdue amount, Active count) with date and status filters.
-- [ ] **Customer Portal**: Self-service interface for logged-in customers to view their active plans, download invoices, and view receipts.
-
----
-
-## ⏰ EXECUTION TIMELINE
-
-| Time Window | Target Milestone | Commit Checkpoint |
-| :--- | :--- | :--- |
-| **10:00 - 11:30 AM** | Core Foundation, Auth, Models & Frontend Shell | **Commit 1 (All members)** |
-| **11:30 - 01:00 PM** | Products, Plans, Subscriptions & Quotation UI | **Commit 2 (All members)** |
-| **01:00 - 02:30 PM** | Automated Billing Engine, Tax & Discount Engines | **Commit 3 (All members)** |
-| **02:30 - 03:30 PM** | Payment Reconciliation, Invoicing, Portal Views | **Commit 4 (All members)** |
-| **03:30 - 04:30 PM** | Finance Lead Dashboard (<2s response) & Stress Test | **Commit 5 (All members)** |
-| **04:30 - 05:00 PM** | End-to-End Polish, Final Walkthrough, Readme & Video | **Final Submission Push** |
+### 4. 👨‍💼 Mohammed Sanjidh S (Base Architecture & Security)
+* **Core Infrastructure**:
+  - FastAPI app initialization, CORS middleware, global error handling.
+  - JWT token utilities and bcrypt password hashing.
+  - Root `README.md` and dependency setup.
 
 ---
 
-> [!IMPORTANT]
-> **Remember:** Whenever you finish a task, add your entry into `CHANGELOG.md`, run your tests, and push immediately to `main`!
+## 🔄 WORKFLOW SEQUENCE
+1. **Dharshin** creates the core SQLite database models & schema.
+2. **Mrinal** creates the synthetic data files in `data/synthetic/` and writes `seed.py` to populate SQLite.
+3. **Dharshin** builds the Admin & Staff backend API routes.
+4. **Mrinal** builds the User/Customer backend API routes.
+5. **Haritha** builds the 3 frontend views and wires them to the live API.
+6. **All members** commit and push their individual files to `main` with entries in `CHANGELOG.md`.
