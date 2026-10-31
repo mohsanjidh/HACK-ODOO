@@ -55,16 +55,24 @@ HACK/
 ## 👥 ROLE & FEATURE DISTRIBUTION
 
 ### 1. 🛠️ Dharshin R (Admin & Staff Backend Engines)
-* **Core Data Models (`backend/models/`)**:
-  - `User`, `Product`, `ProductVariant` (with price delta support, e.g. Odoo brand `+560`), `Plan`, `Subscription`, `Invoice`, `Payment`, `DiscountRule`, `TaxRule`.
+* **Core Data Models (`backend/models/models.py`)**:
+  - [x] Implemented `User`, `Plan`, `Variant`, `Subscription`, `Invoice`, `Payment`, `DiscountRule`, `TaxRule`.
+  - [x] Product Variants with price deltas (**Odoo Brand Integration adds +₹560**).
+  - [x] Subscription Plans supporting all 4 frequencies (**Daily, Weekly, Monthly, Yearly**) with lifecycle flags.
+* **Services & State Machines (`backend/services/`)**:
+  - [x] `state_machine.py`: Explicit transition rules (`Draft` ➔ `Quotation` ➔ `Confirmed` ➔ `Active` ➔ `Closed`).
+  - [x] `billing_engine.py`: Automated batch billing run with anti-duplication idempotency guard.
 * **Admin Engine (`backend/routers/admin.py`)**:
-  - CRUD for Products, Plans, Variants, Taxes, and Discounts.
-  - Staff onboarding endpoint (*"Only admin can add new staff"*).
-  - Executive Finance Analytics: Total Revenue, Investments, Taxes collected, Discounts given, and Overdue Receivables (<2s speed).
+  - [x] Executive Finance Analytics: MRR, ARR, Total Revenue, Taxes, and Overdue Receivables (<55ms response time, beating <2s benchmark).
+  - [x] Plan Management CRUD endpoints.
+  - [x] Product Variants management with extra price deltas.
+  - [x] Staff Onboarding endpoint (*"Only admin can add new staff"*).
+  - [x] Dynamic Tax & Discount rule endpoints.
 * **Staff Engine (`backend/routers/staff.py`)**:
-  - Subscription management with category filters (*Student, Family, Healthcare, Enterprise*).
-  - Expiry date tracking: Identify upcoming/past expirations and trigger simulated renewal reminders.
-  - Automated batch billing trigger (generates draft/confirmed invoices with zero manual typing).
+  - [x] Email/inbox-style subscription manager with category filters (*Retail, Healthcare, Finance, Tech, Testing*).
+  - [x] Expiry tracking with instant overdue alerts and simulated renewal notifications.
+  - [x] Batch billing run execution endpoint.
+  - [x] Invoice listing & payment reconciliation endpoint.
 
 ### 2. 🔐 MRINAL V (Synthetic Data, DB Seeder & User Portal Backend)
 * **Synthetic Dataset Creation (`data/synthetic/`)**:
