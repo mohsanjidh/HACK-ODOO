@@ -88,7 +88,7 @@ function setSession(user) {
     switchSidebarTab("admin-view");
     loadAdminMetrics();
     loadAdminSubscriptions();
-    loadAdminManagePlans();
+    loadAdminPlans();
   } else if (user.role === "staff") {
     switchSidebarTab("staff-view");
     loadStaffCustomers();
@@ -594,10 +594,6 @@ function updateLivePlanPreview() {
   if (pCap) pCap.textContent = `Max ${cap} Subscribers`;
   const pDeadline = document.getElementById("preview-plan-deadline");
   if (pDeadline) pDeadline.textContent = deadline;
-}
-
-function loadAdminPlans() {
-  loadAdminManagePlans();
 }
 
 async function loadAdminManagePlans() {
@@ -1423,7 +1419,12 @@ async function loadCustomerProfile() {
 
   try {
     const res = await fetch(`${API_BASE}/api/auth/profile/${encodeURIComponent(email)}`);
+    if (!res.ok) {
+      console.warn('Customer profile fetch status: ' + res.status);
+      return;
+    }
     const data = await res.json();
+    if (!data || !data.financials) return;
 
     // Fill Financial KPIs
     document.getElementById("cust-total-invested").textContent = `₹${data.financials.total_invested.toLocaleString("en-IN", { minimumFractionDigits: 2 })}`;

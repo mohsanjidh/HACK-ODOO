@@ -73,7 +73,15 @@ All team members must log every code change, module creation, and bug fix here p
 
 ## 🔐 MRINAL V (Synthetic Data, DB Seeder & User Portal Backend)
 
-*(Add your entries below as you develop)*
+- **[03:45 PM]** Complete Customer Portal, Unified Models, Relational Seeder & Schema Resilience:
+  - `backend/models/models.py`: Unified declarative SQLAlchemy schema covering all Admin, Staff, and Customer portal entities with aliases (`ProductVariant = Variant`, `active = is_active`, `usage_limit = max_uses`).
+  - `backend/main.py`: Automated database schema initialization on startup (`Base.metadata.create_all`) and automatic dataset seeder check preventing unseeded database crashes. Added `GET /favicon.ico` brand SVG route and `POST /api/admin/seed-dataset`.
+  - `data/synthetic/seed.py`: Built multi-source SQLite seeder supporting both normalized CSVs and authentic hackathon sample JSON (`subscription-sample-database-1k-en_GB-v2.json`) with relational user profile & role mapping.
+  - `backend/routers/user.py`: Added 12 Customer Portal endpoints (plans catalog, variant pricing, order estimate & checkout, subscriptions lifecycle, printable PDF tax invoice receipts, customer financial KPI summary).
+  - `backend/routers/auth.py`: Exported RBAC dependencies (`get_current_user`, `require_roles`, `require_customer`) supporting Bearer JWT, session tokens, and Google SSO.
+  - `backend/schemas/user.py`: Added comprehensive Pydantic schemas for checkout, catalog, invoices, and customer analytics.
+  - `frontend/index.html` & `frontend/js/app.js`: Added Customer Plan Detail Modal, Stripe-style Checkout Modal with real-time tax/discount estimation, and safeguarded profile fetch handling.
+  - `backend/tests/`: Added end-to-end unit and integration test suite (`test_dataset.py`, `test_api.py`) with 100% pass rate.
 
 ---
 

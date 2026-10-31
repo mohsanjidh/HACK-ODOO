@@ -1,21 +1,33 @@
 from backend.models.models import (
     User,
-    Plan,
+    Product,
     Variant,
+    ProductVariant,
+    Plan,
     Subscription,
+    SubscriptionLine,
     Invoice,
+    InvoiceLine,
     Payment,
     DiscountRule,
-    TaxRule
+    TaxRule,
+    PasswordResetToken,
+    QuotationTemplate,
 )
 
 __all__ = [
     "User",
-    "Plan",
+    "Product",
     "Variant",
+    "ProductVariant",
+    "Plan",
     "Subscription",
+    "SubscriptionLine",
     "Invoice",
+    "InvoiceLine",
     "Payment",
     "DiscountRule",
-    "TaxRule"
+    "TaxRule",
+    "PasswordResetToken",
+    "QuotationTemplate",
 ]

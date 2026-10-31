@@ -615,9 +615,24 @@
             <div class="card-header">
               <div class="card-title">🛍️ Available Subscription Plans (Real-Time Admin Sync)</div>
             </div>
-            <div class="kpi-grid" id="customer-plans-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
-              <!-- Rendered by JS -->
+            <div class="toolbar filter-bar">
+              <div class="filter-search">
+                <label class="sr-only" for="plan-search">Search plans</label>
+                <input id="plan-search" class="form-control" type="search" placeholder="Search plans, categories, or products">
+              </div>
+              <div class="filter-select">
+                <label class="sr-only" for="plan-period">Billing period</label>
+                <select id="plan-period" class="form-control">
+                  <option value="">All billing periods</option>
+                  <option value="daily">Daily</option>
+                  <option value="weekly">Weekly</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="yearly">Yearly</option>
+                </select>
+              </div>
             </div>
+            <div class="pills" id="plan-category-pills" aria-label="Plan categories"></div>
+            <div class="plan-grid" id="plans-grid" aria-live="polite"></div>
           </div>
 
         </div>
@@ -818,6 +833,84 @@
       <div id="plan-modal-content">
         <!-- Rendered dynamically by JS -->
       </div>
+    </div>
+  </div>
+
+  <!-- Customer Plan Detail Modal -->
+  <div class="modal" id="customer-plan-detail-modal" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+    <div class="modal-content modal-xl">
+      <div class="modal-head">
+        <div>
+          <h2 id="detail-title">Plan Details</h2>
+          <p class="muted" id="detail-subtitle"></p>
+        </div>
+        <button class="icon-btn" type="button" data-close aria-label="Close">&times;</button>
+      </div>
+      <div id="detail-body">
+        <div class="detail-grid">
+          <div><span>Price</span><strong id="detail-price">—</strong> / <strong id="detail-period">—</strong></div>
+          <div><span>Product</span><strong id="detail-product">Brightloop</strong></div>
+          <div><span>Minimum quantity</span><strong id="detail-min-qty">—</strong></div>
+          <div><span>Payment terms</span><strong id="detail-payment-terms">—</strong> days</div>
+        </div>
+        <p class="detail-copy" id="detail-description">No description provided.</p>
+        <div class="table-card"><div class="table-scroll"><table><thead><tr><th>Variant</th><th>SKU</th><th>Extra price</th><th>Effective price</th></tr></thead><tbody id="detail-variants">No variants for this plan.</tbody></table></div></div>
+        <div class="modal-actions"><button class="btn btn-ghost" type="button" data-close>Close</button><button class="btn btn-primary" type="button" data-subscribe>Subscribe</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stripe-Style Checkout Modal -->
+  <div class="modal" id="stripe-checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+    <div class="modal-content modal-lg">
+      <div class="modal-head">
+        <div>
+          <h2 id="checkout-title">Proceed to Checkout</h2>
+          <p class="muted">Review your order and enter payment details.</p>
+        </div>
+        <button class="icon-btn" type="button" data-close aria-label="Close">&times;</button>
+      </div>
+      <div class="checkout-summary" id="stripe-checkout-summary"></div>
+      <form id="stripe-checkout-form" novalidate>
+        <input type="hidden" id="stripe-checkout-plan-id">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="stripe-checkout-variant">Variant</label>
+            <select class="form-control" id="stripe-checkout-variant"></select>
+          </div>
+          <div class="form-group">
+            <label for="stripe-checkout-quantity">Quantity</label>
+            <input class="form-control" id="stripe-checkout-quantity" type="number" min="1" step="1" required>
+          </div>
+          <div class="form-group">
+            <label for="stripe-checkout-start">Start date</label>
+            <input class="form-control" id="stripe-checkout-start" type="date" required>
+          </div>
+          <div class="form-group">
+            <label for="stripe-checkout-method">Payment method</label>
+            <select class="form-control" id="stripe-checkout-method">
+              <option value="card">Card</option>
+              <option value="upi">UPI</option>
+              <option value="netbanking">Net banking</option>
+              <option value="wallet">Wallet</option>
+              <option value="bank_transfer">Bank transfer</option>
+            </select>
+          </div>
+          <div class="form-group" id="stripe-checkout-last4-group">
+            <label for="stripe-checkout-last4">Card last 4 digits</label>
+            <input class="form-control" id="stripe-checkout-last4" type="text" inputmode="numeric" maxlength="4" placeholder="4242">
+          </div>
+          <div class="form-group full">
+            <label for="stripe-checkout-note">Note (optional)</label>
+            <input class="form-control" id="stripe-checkout-note" type="text" maxlength="200" placeholder="Anything we should know?">
+          </div>
+        </div>
+        <div class="estimate" id="stripe-checkout-estimate"></div>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" type="button" data-close>Cancel</button>
+          <button class="btn btn-primary" type="submit">Pay ₹XX,XXX Securely</button>
+        </div>
+      </form>
     </div>
   </div>
 
