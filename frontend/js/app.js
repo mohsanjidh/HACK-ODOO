@@ -114,30 +114,30 @@ function renderSidebar(role) {
   if (role === "admin") {
     html = `
       <div class="sidebar-title">Executive Governance</div>
-      <div class="sidebar-item active" onclick="switchSidebarTab('admin-view')">
+      <div class="sidebar-item active" id="side-admin-dash" onclick="switchSidebarTab('admin-view')">
         <span class="icon">👑</span>
-        <span>Executive Dashboard</span>
+        <span>Dashboard & Graph</span>
       </div>
-      <div class="sidebar-item" onclick="switchSidebarTab('admin-plans')">
+      <div class="sidebar-item" id="side-admin-create" onclick="switchSidebarTab('admin-create-plan-view')">
+        <span class="icon">➕</span>
+        <span>Set Up New Plan</span>
+      </div>
+      <div class="sidebar-item" id="side-admin-manage" onclick="switchSidebarTab('admin-manage-plans-view')">
         <span class="icon">📦</span>
-        <span>Plans & Variants (+₹560)</span>
+        <span>Manage Plans & Variants</span>
       </div>
-      <div class="sidebar-item" onclick="switchSidebarTab('admin-subs')">
-        <span class="icon">⚡</span>
-        <span>Disallow & Auto-Refund</span>
-      </div>
-      <div class="sidebar-item" onclick="switchSidebarTab('admin-audit')">
-        <span class="icon">🛡️</span>
-        <span>System Audit Report</span>
+      <div class="sidebar-item" id="side-admin-staff" onclick="switchSidebarTab('admin-staff-view')">
+        <span class="icon">💼</span>
+        <span>Staff & Commissions</span>
       </div>
       <div class="sidebar-title">Portals Switcher</div>
       <div class="sidebar-item" onclick="switchSidebarTab('staff-view'); loadStaffCustomers(); loadStaffSubscriptions(); loadStaffInvoices();">
         <span class="icon">📋</span>
-        <span>Staff Operations View</span>
+        <span>Staff Operations Desk</span>
       </div>
       <div class="sidebar-item" onclick="switchSidebarTab('customer-view'); loadCustomerProfile(); loadCustomerPlans();">
         <span class="icon">👤</span>
-        <span>Customer Experience View</span>
+        <span>Customer Portal View</span>
       </div>
     `;
   } else if (role === "staff") {
@@ -196,8 +196,28 @@ function switchSidebarTab(tabName) {
   // Hide all panels
   document.querySelectorAll(".view-panel").forEach(panel => panel.classList.remove("active"));
 
-  if (tabName.startsWith("admin")) {
+  if (tabName === "admin-view") {
     document.getElementById("admin-view").classList.add("active");
+    const el = document.getElementById("side-admin-dash");
+    if (el) el.classList.add("active");
+    loadAdminMetrics();
+    loadAdminSubscriptions();
+  } else if (tabName === "admin-create-plan-view" || tabName === "admin-create") {
+    document.getElementById("admin-create-plan-view").classList.add("active");
+    const el = document.getElementById("side-admin-create");
+    if (el) el.classList.add("active");
+    populateStaffSelectForNewPlan();
+  } else if (tabName === "admin-manage-plans-view" || tabName === "admin-manage") {
+    document.getElementById("admin-manage-plans-view").classList.add("active");
+    const el = document.getElementById("side-admin-manage");
+    if (el) el.classList.add("active");
+    loadAdminManagePlans();
+    loadAdminVariantsTable();
+  } else if (tabName === "admin-staff-view" || tabName === "admin-staff") {
+    document.getElementById("admin-staff-view").classList.add("active");
+    const el = document.getElementById("side-admin-staff");
+    if (el) el.classList.add("active");
+    loadStaffCommissions();
   } else if (tabName.startsWith("staff")) {
     document.getElementById("staff-view").classList.add("active");
   } else {
@@ -215,12 +235,106 @@ async function loadAdminMetrics() {
     const data = await res.json();
     const m = data.metrics;
 
-    document.getElementById("kpi-mrr").textContent = `₹${m.mrr.toLocaleString("en-IN", { minimumFractionDigits: 2 })}`;
+    const totalCash = m.total_revenue;
+    const estimatedExpenses = totalCash * 0.165;
+    const netProfit = totalCash - estimatedExpenses;
+
+    document.getElementById("kpi-cash").textContent = `₹${totalCash.toLocaleString("en-IN", { minimumFractionDigits: 2 })}`;
+    document.getElementById("kpi-expenses").textContent = `₹${estimatedExpenses.toLocaleString("en-IN", { minimumFractionDigits: 2 })}`;
+    document.getElementById("kpi-net-profit").textContent = `₹${netProfit.toLocaleString("en-IN", { minimumFractionDigits: 2 })}`;
     document.getElementById("kpi-arr").textContent = `₹${m.arr.toLocaleString("en-IN", { minimumFractionDigits: 2 })}`;
-    document.getElementById("kpi-cash").textContent = `₹${m.total_revenue.toLocaleString("en-IN", { minimumFractionDigits: 2 })}`;
-    document.getElementById("kpi-overdue").textContent = `₹${m.overdue_receivables.toLocaleString("en-IN", { minimumFractionDigits: 2 })}`;
+
+    renderAllTimeInvestmentsGraph();
   } catch (err) {
     console.error("Failed to load admin metrics:", err);
+  }
+}
+
+async function renderAllTimeInvestmentsGraph() {
+  const container = document.getElementById("all-time-graph-container");
+  if (!container) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/investment-timeline`);
+    const data = await res.json();
+    const points = data.timeline;
+
+    const maxVal = Math.max(...points.map(p => p.capital_invested)) * 1.15;
+    const width = 760;
+    const height = 220;
+    const padX = 70;
+    const padY = 25;
+
+    const stepX = (width - padX * 2) / (points.length - 1);
+
+    // Calculate coordinate points
+    const coordsInvested = points.map((p, i) => {
+      const x = padX + i * stepX;
+      const y = height - padY - (p.capital_invested / maxVal) * (height - padY * 2);
+      return { x, y, data: p };
+    });
+
+    const coordsNet = points.map((p, i) => {
+      const x = padX + i * stepX;
+      const y = height - padY - (p.net_revenue / maxVal) * (height - padY * 2);
+      return { x, y };
+    });
+
+    const coordsExp = points.map((p, i) => {
+      const x = padX + i * stepX;
+      const y = height - padY - (p.expenses / maxVal) * (height - padY * 2);
+      return { x, y };
+    });
+
+    // Generate SVG path strings
+    const pathInvested = coordsInvested.reduce((acc, c, i) => `${acc} ${i === 0 ? 'M' : 'L'} ${c.x} ${c.y}`, '');
+    const pathNet = coordsNet.reduce((acc, c, i) => `${acc} ${i === 0 ? 'M' : 'L'} ${c.x} ${c.y}`, '');
+    const pathExp = coordsExp.reduce((acc, c, i) => `${acc} ${i === 0 ? 'M' : 'L'} ${c.x} ${c.y}`, '');
+
+    const areaInvested = `${pathInvested} L ${coordsInvested[coordsInvested.length - 1].x} ${height - padY} L ${coordsInvested[0].x} ${height - padY} Z`;
+
+    container.innerHTML = `
+      <svg viewBox="0 0 ${width} ${height}" style="width: 100%; height: auto; font-family: inherit;">
+        <defs>
+          <linearGradient id="invGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#017E84" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#017E84" stop-opacity="0.0"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Horizontal Gridlines -->
+        <line x1="${padX}" y1="${padY}" x2="${width - padX}" y2="${padY}" stroke="#e2e8f0" stroke-dasharray="4"/>
+        <line x1="${padX}" y1="${(height - padY * 2) / 2 + padY}" x2="${width - padX}" y2="${(height - padY * 2) / 2 + padY}" stroke="#e2e8f0" stroke-dasharray="4"/>
+        <line x1="${padX}" y1="${height - padY}" x2="${width - padX}" y2="${height - padY}" stroke="#cbd5e1"/>
+
+        <!-- Y Axis Labels -->
+        <text x="${padX - 8}" y="${padY + 4}" fill="#94a3b8" font-size="10" text-anchor="end">₹${(maxVal / 10000000).toFixed(1)}Cr</text>
+        <text x="${padX - 8}" y="${(height - padY * 2) / 2 + padY + 4}" fill="#94a3b8" font-size="10" text-anchor="end">₹${(maxVal / 20000000).toFixed(1)}Cr</text>
+        <text x="${padX - 8}" y="${height - padY}" fill="#94a3b8" font-size="10" text-anchor="end">₹0</text>
+
+        <!-- Area Fill -->
+        <path d="${areaInvested}" fill="url(#invGrad)"/>
+
+        <!-- Lines -->
+        <path d="${pathInvested}" fill="none" stroke="#017E84" stroke-width="3" stroke-linecap="round"/>
+        <path d="${pathNet}" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="${pathExp}" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4" stroke-linecap="round"/>
+
+        <!-- Data Point Circles and X Axis Labels -->
+        ${coordsInvested.map((c, i) => `
+          <circle cx="${c.x}" cy="${c.y}" r="5" fill="#ffffff" stroke="#017E84" stroke-width="3" style="cursor: pointer;">
+            <title>${c.data.month}\nInvested: ₹${c.data.capital_invested.toLocaleString("en-IN")}\nNet Profit: ₹${c.data.net_revenue.toLocaleString("en-IN")}\nExpenses: ₹${c.data.expenses.toLocaleString("en-IN")}\nActive Clients: ${c.data.active_subscribers}</title>
+          </circle>
+          <text x="${c.x}" y="${height - 6}" fill="#64748b" font-size="11" text-anchor="middle" font-weight="600">${c.data.month}</text>
+        `).join("")}
+      </svg>
+      <div style="display: flex; justify-content: space-between; margin-top: 6px; padding: 0 10px; font-size: 0.75rem; color: var(--text-muted);">
+        <span>Hover over data points to inspect detailed financial cohorts & operating margins</span>
+        <span>Cumulative Capital: <strong>₹${data.total_cumulative_investment.toLocaleString("en-IN")}</strong> | Net Retained Profit: <strong>₹${data.total_net_profit.toLocaleString("en-IN")}</strong></span>
+      </div>
+    `;
+  } catch (err) {
+    container.innerHTML = `<span style="color: var(--danger);">Failed to load investment timeline graph: ${err}</span>`;
   }
 }
 
@@ -290,56 +404,41 @@ async function disallowSubscription(subId, subNumber) {
   }
 }
 
-async function loadAdminPlans() {
-  const tbody = document.getElementById("admin-plans-table");
-  try {
-    const res = await fetch(`${API_BASE}/api/admin/plans`);
-    const plans = await res.json();
-    cachedPlans = plans;
+async function populateStaffSelectForNewPlan() {
+  const sel = document.getElementById("new-plan-staff-select");
+  if (!sel) return;
 
-    tbody.innerHTML = plans.map(p => `
-      <tr>
-        <td style="font-weight: 700;">${p.name}</td>
-        <td><span class="badge badge-confirmed">${p.category}</span></td>
-        <td style="text-transform: capitalize;">${p.billing_period}</td>
-        <td style="font-weight: 700;">₹${p.price.toLocaleString("en-IN")}</td>
-        <td>${p.pausable ? "✓ Yes" : "✕ No"}</td>
-        <td>
-          <button class="btn btn-secondary btn-sm" style="color: var(--danger);" onclick="deletePlan(${p.id}, '${p.name}')">
-            🗑️ Disallow Plan
-          </button>
-        </td>
-      </tr>
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/staff`);
+    const staffList = await res.json();
+    sel.innerHTML = staffList.map(st => `
+      <option value="${st.id}" data-name="${st.name}">${st.name} (${st.email})</option>
     `).join("");
+    if (staffList.length === 0) {
+      sel.innerHTML = `<option value="">Operations Desk (Default)</option>`;
+    }
   } catch (err) {
-    console.error("Failed to load plans:", err);
+    sel.innerHTML = `<option value="">Operations Desk</option>`;
   }
 }
 
-async function deletePlan(planId, planName) {
-  if (!confirm(`Remove '${planName}' from the public catalog? Customers will no longer be able to purchase it.`)) {
-    return;
-  }
+async function submitDetailedCreatePlan() {
+  const name = document.getElementById("new-plan-name").value.trim();
+  const plan_code = document.getElementById("new-plan-code").value.trim() || `PLN-0${Math.floor(Math.random() * 900 + 100)}`;
+  const description = document.getElementById("new-plan-desc").value.trim();
+  const category = document.getElementById("new-plan-cat").value;
+  const billing_period = document.getElementById("new-plan-period").value;
+  const price = parseFloat(document.getElementById("new-plan-rate").value);
+  const subscriber_limit = parseInt(document.getElementById("new-plan-cap").value) || 100;
+  const revenue_limit = parseFloat(document.getElementById("new-plan-rev-limit").value) || 500000.0;
+  const discount_deadline = document.getElementById("new-plan-deadline").value;
 
-  try {
-    const res = await fetch(`${API_BASE}/api/admin/plans/${planId}`, { method: "DELETE" });
-    const data = await res.json();
-    alert(data.message);
-    loadAdminPlans();
-    loadCustomerPlans();
-  } catch (err) {
-    alert("Delete plan error: " + err);
-  }
-}
-
-async function submitCreatePlan() {
-  const name = document.getElementById("plan-name").value.trim();
-  const category = document.getElementById("plan-category").value;
-  const billing_period = document.getElementById("plan-period").value;
-  const price = parseFloat(document.getElementById("plan-price").value);
+  const staffSelect = document.getElementById("new-plan-staff-select");
+  const assigned_staff_id = staffSelect?.value ? parseInt(staffSelect.value) : null;
+  const assigned_staff_name = staffSelect?.options[staffSelect.selectedIndex]?.getAttribute("data-name") || "Operations Rep";
 
   if (!name || isNaN(price)) {
-    alert("Please enter a valid plan name and price.");
+    alert("Please provide at least a Plan Name and Base Rate.");
     return;
   }
 
@@ -347,13 +446,344 @@ async function submitCreatePlan() {
     const res = await fetch(`${API_BASE}/api/admin/plans`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, category, billing_period, price, pausable: 1, renewable: 1 })
+      body: JSON.stringify({
+        name,
+        plan_code,
+        description,
+        category,
+        billing_period,
+        price,
+        subscriber_limit,
+        revenue_limit,
+        discount_deadline,
+        assigned_staff_id,
+        assigned_staff_name,
+        pausable: 1,
+        renewable: 1
+      })
     });
     const data = await res.json();
-    alert("✅ Plan created successfully!");
-    closeModal("add-plan-modal");
-    loadAdminPlans();
-    loadCustomerPlans();
+    alert(`✅ Subscription Plan '${name}' (${plan_code}) published successfully!\nStaff Allotment: ${assigned_staff_name}`);
+    switchSidebarTab("admin-manage-plans-view");
+  } catch (err) {
+    alert("Create plan error: " + err);
+  }
+}
+
+async function loadAdminManagePlans() {
+  const grid = document.getElementById("admin-detailed-plans-grid");
+  if (!grid) return;
+  grid.innerHTML = "Loading plans catalog...";
+
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/plans`);
+    const plans = await res.json();
+    cachedPlans = plans;
+
+    grid.innerHTML = plans.map(p => {
+      const isActive = p.is_active !== 0;
+      const capLimit = p.subscriber_limit || 100;
+      return `
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; margin-bottom: 0; border: 1px solid ${isActive ? 'var(--border-color)' : '#fca5a5'};">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+              <div>
+                <span class="badge" style="background:#eef2ff; color:#4338ca; border:1px solid #c7d2fe; margin-bottom: 4px;">${p.plan_code || 'PLN-0' + p.id}</span>
+                <div style="font-weight: 800; font-size: 1.15rem; color: var(--text-primary);">${p.name}</div>
+              </div>
+              <span class="badge ${isActive ? 'badge-active' : 'badge-overdue'}">
+                ${isActive ? 'Active' : 'Disallowed'}
+              </span>
+            </div>
+
+            <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary); margin: 6px 0 2px;">
+              ₹${p.price.toLocaleString("en-IN")}
+              <span style="font-size: 0.85rem; font-weight: 400; color: var(--text-muted);">/ ${p.billing_period}</span>
+            </div>
+
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">
+              ${p.description || "Recurring enterprise digital service license."}
+            </p>
+
+            <div style="background: #f8fafc; padding: 10px; border-radius: 8px; margin-bottom: 14px; font-size: 0.78rem;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span>Category / Sector:</span>
+                <strong>${p.category}</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span>Discount Deadline:</span>
+                <strong style="color: #d97706;">${p.discount_deadline || '2026-11-30'}</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span>Capacity Threshold:</span>
+                <strong>Max ${capLimit} Subs / ₹${(p.revenue_limit || 500000).toLocaleString("en-IN")}</strong>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <button class="btn btn-sm" style="background: #0f766e;" onclick="openPlanAnalyticsModal(${p.id})">
+              📊 Click for Traffic Graph & Analytics
+            </button>
+            <div style="display: flex; gap: 6px;">
+              <button class="btn btn-secondary btn-sm" style="flex: 1; ${isActive ? 'color: var(--danger);' : 'color: var(--success);'}" onclick="togglePlanActive(${p.id})">
+                ${isActive ? '⚡ Disallow Plan' : '✓ Reactivate Plan'}
+              </button>
+              <button class="btn btn-secondary btn-sm" style="flex: 1;" onclick="setPlanLimitsPrompt(${p.id}, ${capLimit}, ${p.revenue_limit || 500000})">
+                ⚙️ Set Limits
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  } catch (err) {
+    grid.innerHTML = `<span style="color: var(--danger);">Failed to load plans: ${err}</span>`;
+  }
+}
+
+async function openPlanAnalyticsModal(planId) {
+  const modalContent = document.getElementById("plan-modal-content");
+  modalContent.innerHTML = "Loading deep plan traffic analytics & investor breakdown...";
+  openModal("plan-analytics-modal");
+
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/plans/${planId}/analytics`);
+    const data = await res.json();
+    const p = data.plan;
+    const m = data.metrics;
+    const tf = data.traffic_graph;
+
+    document.getElementById("plan-modal-title").textContent = `📊 Analytics: ${p.name} (${p.plan_code})`;
+
+    // Generate responsive SVG bar/line graph for traffic
+    const maxRev = Math.max(...tf.map(t => t.revenue)) * 1.2 || 10000;
+    const svgWidth = 680;
+    const svgHeight = 150;
+    const barWidth = 40;
+    const gap = (svgWidth - barWidth * tf.length) / (tf.length + 1);
+
+    modalContent.innerHTML = `
+      <!-- Top Metrics Row -->
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px;">
+        <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
+          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">ACTIVE SUBSCRIBERS</div>
+          <div style="font-size: 1.3rem; font-weight: 800; color: var(--primary);">${m.active_subscribers} Accounts</div>
+        </div>
+        <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
+          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">TOTAL PLAN REVENUE</div>
+          <div style="font-size: 1.3rem; font-weight: 800; color: var(--success);">₹${m.generated_revenue.toLocaleString("en-IN")}</div>
+        </div>
+        <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
+          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">CAPACITY UTILIZATION</div>
+          <div style="font-size: 1.3rem; font-weight: 800;">${m.capacity_utilization_pct}% of Cap</div>
+        </div>
+        <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
+          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">DISCOUNT DEADLINE</div>
+          <div style="font-size: 1.1rem; font-weight: 700; color: #d97706;">${p.discount_deadline}</div>
+        </div>
+      </div>
+
+      <!-- Plan Traffic Progression Graph -->
+      <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 20px;">
+        <div style="font-weight: 700; font-size: 0.88rem; margin-bottom: 8px; display: flex; justify-content: space-between;">
+          <span>Weekly Traffic & Revenue Volume Graph</span>
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Capacity Ceiling: ${p.subscriber_limit} Subs</span>
+        </div>
+        <svg viewBox="0 0 ${svgWidth} ${svgHeight}" style="width: 100%; height: auto;">
+          <!-- Baseline -->
+          <line x1="20" y1="${svgHeight - 25}" x2="${svgWidth - 20}" y2="${svgHeight - 25}" stroke="#cbd5e1"/>
+
+          ${tf.map((t, idx) => {
+            const x = gap + idx * (barWidth + gap);
+            const barH = (t.revenue / maxRev) * (svgHeight - 45);
+            const y = (svgHeight - 25) - barH;
+            return `
+              <rect x="${x}" y="${y}" width="${barWidth}" height="${barH}" rx="4" fill="#017E84" opacity="0.85">
+                <title>${t.period}: ₹${t.revenue.toLocaleString("en-IN")} (${t.subscribers} Subs)</title>
+              </rect>
+              <text x="${x + barWidth / 2}" y="${y - 4}" font-size="10" font-weight="700" fill="#0f766e" text-anchor="middle">₹${Math.round(t.revenue / 1000)}k</text>
+              <text x="${x + barWidth / 2}" y="${svgHeight - 8}" font-size="10" fill="#64748b" text-anchor="middle">${t.period}</text>
+            `;
+          }).join("")}
+        </svg>
+      </div>
+
+      <!-- Subscribers List -->
+      <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 8px;">Active Corporate Subscribers for this Plan:</div>
+      <div class="table-container" style="max-height: 200px; overflow-y: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Sub #</th>
+              <th>Client Contact</th>
+              <th>Variant</th>
+              <th>Qty</th>
+              <th>Investment</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${data.subscribers.map(sub => `
+              <tr>
+                <td style="font-weight: 700;">${sub.subscription_number}</td>
+                <td>
+                  <div style="font-weight: 600;">${sub.customer_name}</div>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">${sub.customer_email}</div>
+                </td>
+                <td><span class="badge badge-confirmed">${sub.variant_name}</span></td>
+                <td>${sub.quantity}</td>
+                <td style="font-weight: 700;">₹${sub.total_amount.toLocaleString("en-IN")}</td>
+                <td><span class="badge badge-${sub.status.toLowerCase()}">${sub.status}</span></td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+    `;
+  } catch (err) {
+    modalContent.innerHTML = `<span style="color: var(--danger);">Analytics error: ${err}</span>`;
+  }
+}
+
+async function togglePlanActive(planId) {
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/plans/${planId}/toggle-status`, { method: "POST" });
+    const data = await res.json();
+    alert(`⚡ ${data.message}`);
+    loadAdminManagePlans();
+  } catch (err) {
+    alert("Toggle status error: " + err);
+  }
+}
+
+async function setPlanLimitsPrompt(planId, currentCap, currentRev) {
+  const newCap = prompt("Enter Max Subscribers capacity limit:", currentCap);
+  if (newCap === null) return;
+
+  const newRev = prompt("Enter Revenue Disallow Threshold (INR):", currentRev);
+  if (newRev === null) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/plans/${planId}/set-limits`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ subscriber_limit: parseInt(newCap), revenue_limit: parseFloat(newRev) })
+    });
+    const data = await res.json();
+    alert(`✅ ${data.message}`);
+    loadAdminManagePlans();
+  } catch (err) {
+    alert("Error: " + err);
+  }
+}
+
+async function loadAdminVariantsTable() {
+  const tbody = document.getElementById("admin-variants-table");
+  if (!tbody) return;
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/variants`);
+    const variants = await res.json();
+    tbody.innerHTML = variants.map(v => `
+      <tr>
+        <td style="font-weight: 700;">${v.product_name}</td>
+        <td><span class="badge badge-confirmed">${v.variant_name}</span></td>
+        <td style="font-weight: 700; color: var(--primary);">+₹${v.extra_price.toLocaleString("en-IN")}</td>
+        <td style="font-size: 0.82rem; color: var(--text-secondary);">${v.notes || "Official Odoo Brand attribute delta"}</td>
+      </tr>
+    `).join("");
+  } catch (err) {
+    console.error("Failed to load variants:", err);
+  }
+}
+
+// ----------------------------------------------------------
+// 4. STAFF GOVERNANCE & COMMISSION FUNDING
+// ----------------------------------------------------------
+
+async function loadStaffCommissions() {
+  const tbody = document.getElementById("admin-staff-commissions-table");
+  if (!tbody) return;
+  tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted);">Loading staff funding...</td></tr>`;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/staff-commissions`);
+    const staff = await res.json();
+
+    tbody.innerHTML = staff.map(st => `
+      <tr>
+        <td style="font-weight: 700;">${st.name}</td>
+        <td>
+          <div>${st.email}</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted);">${st.phone}</div>
+        </td>
+        <td><span class="badge badge-quotation">${st.assigned_plan}</span></td>
+        <td style="font-weight: 700; color: var(--primary);">
+          ${st.commission_rate}%
+        </td>
+        <td style="text-align: center;">${st.active_clients_count}</td>
+        <td style="font-weight: 700;">₹${st.generated_revenue.toLocaleString("en-IN")}</td>
+        <td style="font-weight: 800; color: var(--success);">₹${st.total_commission_earned.toLocaleString("en-IN")}</td>
+        <td>
+          <button class="btn btn-secondary btn-sm" onclick="editStaffCommissionPrompt(${st.id}, ${st.commission_rate}, '${st.assigned_plan}')">
+            ✏️ Edit Rate
+          </button>
+        </td>
+      </tr>
+    `).join("");
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="8" style="color: var(--danger);">Failed to load staff commissions: ${err}</td></tr>`;
+  }
+}
+
+async function editStaffCommissionPrompt(staffId, currentRate, currentPlan) {
+  const newRate = prompt(`Enter new commission rate (%) for staff member:`, currentRate);
+  if (newRate === null || isNaN(parseFloat(newRate))) return;
+
+  const newPlan = prompt(`Assign designated subscription plan:`, currentPlan);
+  if (newPlan === null) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/staff/${staffId}/commission`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ commission_rate: parseFloat(newRate), assigned_plan: newPlan })
+    });
+    const data = await res.json();
+    alert(`✅ ${data.message}`);
+    loadStaffCommissions();
+  } catch (err) {
+    alert("Error updating commission: " + err);
+  }
+}
+
+async function submitQuickStaff() {
+  const name = document.getElementById("quick-staff-name").value.trim();
+  const email = document.getElementById("quick-staff-email").value.trim();
+  const phone = document.getElementById("quick-staff-phone").value.trim();
+  const commission_rate = parseFloat(document.getElementById("quick-staff-comm").value) || 7.5;
+
+  if (!name || !email) {
+    alert("Please enter at least staff name and work email.");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/staff`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, phone, commission_rate, assigned_plan: "All Plans" })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      alert("Error: " + data.detail);
+      return;
+    }
+    alert(`✅ Operations Staff Member '${name}' authorized with ${commission_rate}% commission!`);
+    document.getElementById("quick-staff-name").value = "";
+    document.getElementById("quick-staff-email").value = "";
+    document.getElementById("quick-staff-phone").value = "";
+    loadStaffCommissions();
   } catch (err) {
     alert("Error: " + err);
   }
@@ -445,6 +875,157 @@ async function loadAuditReport() {
   } catch (err) {
     div.innerHTML = `<span style="color: var(--danger);">Audit failed: ${err}</span>`;
   }
+}
+
+async function openExecutiveReportModal() {
+  const container = document.getElementById("printable-executive-report-content");
+  container.innerHTML = "Generating live executive financial audit report...";
+  openModal("executive-report-modal");
+
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/financial-report`);
+    const data = await res.json();
+    const s = data.executive_summary;
+
+    container.innerHTML = `
+      <div class="invoice-header-row">
+        <div>
+          <div style="font-family: 'Outfit', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--primary);">
+            ⚡ Brightloop Software — Executive Financial Report
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
+            Comprehensive Investment, Plan Breakdown & Staff Governance Audit<br>
+            CUSAT Technology Corridor, Kochi, Kerala 682022
+          </div>
+        </div>
+        <div style="text-align: right;">
+          <div class="invoice-stamp paid">
+            OFFICIAL AUDIT
+          </div>
+          <div style="margin-top: 8px; font-weight: 700; font-size: 0.95rem;">
+            Generated: ${data.generated_at}
+          </div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);">
+            Engine: Local SQLite Fast-Engine (<20ms)
+          </div>
+        </div>
+      </div>
+
+      <!-- Executive KPI Cards -->
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px;">
+        <div style="background: #f8fafc; padding: 14px; border-radius: 10px; border: 1px solid var(--border-color);">
+          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">TOTAL CAPITAL COLLECTED</div>
+          <div style="font-size: 1.25rem; font-weight: 800; color: var(--success); margin-top: 4px;">₹${s.total_capital_collected.toLocaleString("en-IN")}</div>
+        </div>
+        <div style="background: #f8fafc; padding: 14px; border-radius: 10px; border: 1px solid var(--border-color);">
+          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">MONTHLY RECURRING (MRR)</div>
+          <div style="font-size: 1.25rem; font-weight: 800; color: var(--primary); margin-top: 4px;">₹${s.mrr.toLocaleString("en-IN")}</div>
+        </div>
+        <div style="background: #f8fafc; padding: 14px; border-radius: 10px; border: 1px solid var(--border-color);">
+          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">PROJECTED ARR (12X)</div>
+          <div style="font-size: 1.25rem; font-weight: 800; margin-top: 4px;">₹${s.arr.toLocaleString("en-IN")}</div>
+        </div>
+        <div style="background: #f8fafc; padding: 14px; border-radius: 10px; border: 1px solid var(--border-color);">
+          <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">OVERDUE RECEIVABLES</div>
+          <div style="font-size: 1.25rem; font-weight: 800; color: var(--danger); margin-top: 4px;">₹${s.overdue_receivables.toLocaleString("en-IN")}</div>
+        </div>
+      </div>
+
+      <!-- Plan by Plan Investment Breakdown Table -->
+      <h4 style="margin-bottom: 8px; font-size: 0.95rem;">1. Plan-by-Plan Investment & Subscriber Breakdown</h4>
+      <table style="margin-bottom: 24px;">
+        <thead>
+          <tr>
+            <th>Plan Title</th>
+            <th>Category</th>
+            <th>Frequency</th>
+            <th>Base Rate</th>
+            <th>Active Subs</th>
+            <th>Total Invested (MRR)</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data.plan_investments.map(p => `
+            <tr>
+              <td style="font-weight: 700;">${p.plan_name}</td>
+              <td><span class="badge badge-confirmed">${p.category}</span></td>
+              <td style="text-transform: capitalize;">${p.billing_period}</td>
+              <td>₹${p.base_price.toLocaleString("en-IN")}</td>
+              <td style="font-weight: 600;">${p.active_subscribers} / ${p.total_subscribers}</td>
+              <td style="font-weight: 700;">₹${p.total_invested_mrr.toLocaleString("en-IN")}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+
+      <!-- Top Customer Investors -->
+      <h4 style="margin-bottom: 8px; font-size: 0.95rem;">2. Top B2B Client Investments</h4>
+      <table style="margin-bottom: 24px;">
+        <thead>
+          <tr>
+            <th>Client Name</th>
+            <th>Company</th>
+            <th>Email</th>
+            <th>Total Capital Invested</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data.top_investors.map(c => `
+            <tr>
+              <td style="font-weight: 700;">${c.customer_name}</td>
+              <td>${c.company_name}</td>
+              <td style="color: var(--text-muted);">${c.email}</td>
+              <td style="font-weight: 700; color: var(--success);">₹${c.total_invested.toLocaleString("en-IN")}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+
+      <!-- Staff Governance -->
+      <h4 style="margin-bottom: 8px; font-size: 0.95rem;">3. Operations Staff Governance Roster (Authorized by Admin)</h4>
+      <table style="margin-bottom: 24px;">
+        <thead>
+          <tr>
+            <th>Staff Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Onboarded Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data.staff_roster.map(st => `
+            <tr>
+              <td style="font-weight: 700;">${st.name}</td>
+              <td>${st.email}</td>
+              <td>${st.phone}</td>
+              <td>${st.created_at || "2026-10-31"}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+
+      <!-- Footer & Signature -->
+      <div style="border-top: 1px solid var(--border-color); padding-top: 14px; display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: var(--text-muted);">
+        <div>
+          Certified Immutable Executive Audit • Evaluator Reference: Odoo x MAT9.0 Hackathon 2026
+        </div>
+        <div style="text-align: right; font-weight: 700; color: var(--primary);">
+          Authorized by Admin (Bhavya Mehta)
+        </div>
+      </div>
+    `;
+  } catch (err) {
+    container.innerHTML = `<span style="color: var(--danger);">Failed to load financial report: ${err}</span>`;
+  }
+}
+
+function copyReportShareLink() {
+  const shareUrl = `${API_BASE}/api/admin/financial-report`;
+  navigator.clipboard.writeText(shareUrl).then(() => {
+    alert("✅ Executive Report API Link copied to clipboard!\nYou can paste and share this report with auditors, evaluators, and stakeholders:\n" + shareUrl);
+  }).catch(() => {
+    prompt("Copy this verified report link to share:", shareUrl);
+  });
 }
 
 // ----------------------------------------------------------

@@ -129,46 +129,66 @@
         <div id="admin-view" class="view-panel">
           <div class="section-header">
             <div>
-              <h1 class="section-title">👑 Admin Executive Governance</h1>
-              <p class="section-subtitle">Real-time metrics, plan governance, subscription disallowance & automated refunds.</p>
+              <h1 class="section-title">👑 Admin Executive Dashboard</h1>
+              <p class="section-subtitle">Capital investment accounts, revenue analytics, live interactive graph & PDF report.</p>
             </div>
             <div style="display: flex; gap: 8px;">
               <button class="btn btn-secondary btn-sm" onclick="loadAdminMetrics()">🔄 Refresh KPIs</button>
-              <button class="btn btn-sm" onclick="openModal('add-plan-modal')">+ Create Plan</button>
-              <button class="btn btn-sm" onclick="openModal('add-variant-modal')">+ Add Variant (+₹560)</button>
-              <button class="btn btn-secondary btn-sm" onclick="openModal('add-staff-modal')">+ Add Staff</button>
+              <button class="btn btn-sm" style="background: #1e3a8a; border-color: #1e3a8a;" onclick="openExecutiveReportModal()">📄 Live Investment PDF Report</button>
+              <button class="btn btn-sm" onclick="switchSidebarTab('admin-create')">➕ Setup New Plan</button>
             </div>
           </div>
 
-          <!-- KPI Cards -->
+          <!-- KPI Cards: Investments, Revenue, Expenses, ARR -->
           <div class="kpi-grid">
             <div class="kpi-card">
-              <div class="kpi-label">Monthly Recurring Revenue</div>
-              <div class="kpi-value" id="kpi-mrr">₹0.00</div>
-              <div class="kpi-sub" style="color: var(--success);">⚡ Auto-normalized across 4 cycles</div>
+              <div class="kpi-label">Total Capital Invested</div>
+              <div class="kpi-value" id="kpi-cash" style="color: var(--success);">₹0.00</div>
+              <div class="kpi-sub">Cumulative B2B client investments</div>
             </div>
             <div class="kpi-card">
-              <div class="kpi-label">Annual Run Rate (ARR)</div>
+              <div class="kpi-label">Operating Expenses (~16.5%)</div>
+              <div class="kpi-value" id="kpi-expenses" style="color: var(--warning);">₹0.00</div>
+              <div class="kpi-sub">Cloud infrastructure & payment gateway</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Net Profit / Revenue</div>
+              <div class="kpi-value" id="kpi-net-profit" style="color: var(--primary);">₹0.00</div>
+              <div class="kpi-sub">Retained operational margin</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Projected ARR (12x Run Rate)</div>
               <div class="kpi-value" id="kpi-arr">₹0.00</div>
-              <div class="kpi-sub" style="color: var(--primary);">📈 12x Projected ARR</div>
+              <div class="kpi-sub" style="color: var(--primary);">📈 Normalized Annual Run Rate</div>
             </div>
-            <div class="kpi-card">
-              <div class="kpi-label">Cash Collected</div>
-              <div class="kpi-value" id="kpi-cash">₹0.00</div>
-              <div class="kpi-sub" style="color: var(--success);">✓ Reconciled B2B payments</div>
+          </div>
+
+          <!-- All-Time Investments Interactive SVG Graph -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">📈 All-Time Capital Investments & Revenue Progression Graph</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+                  Monitoring cumulative investments, operating expenses, and subscriber traffic across cohorts
+                </div>
+              </div>
+              <div style="display: flex; gap: 12px; font-size: 0.8rem; font-weight: 600;">
+                <span style="color: #017E84;">● Capital Invested</span>
+                <span style="color: #f59e0b;">● Expenses</span>
+                <span style="color: #10b981;">● Net Revenue</span>
+              </div>
             </div>
-            <div class="kpi-card">
-              <div class="kpi-label">Overdue Debt</div>
-              <div class="kpi-value" id="kpi-overdue" style="color: var(--danger);">₹0.00</div>
-              <div class="kpi-sub" style="color: var(--danger);">⚠️ Needs staff collection</div>
+
+            <div id="all-time-graph-container" style="padding: 10px 0; min-height: 260px;">
+              <!-- Rendered by JS via SVG with hover tooltips -->
             </div>
           </div>
 
           <!-- Real-Time Disallow & Auto-Refund Table -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">⚡ Organization Subscriptions (Real-Time Disallow & Instant Refund)</div>
-              <span style="font-size: 0.8rem; color: var(--text-muted);">Deleting a subscription marks it cancelled and issues a 100% automatic refund</span>
+              <div class="card-title">⚡ Organization Subscriptions (Real-Time Disallow & Instant 100% Refund)</div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">Deleting a subscription marks it cancelled and issues an immediate 100% refund credit</span>
             </div>
             <div class="table-container">
               <table>
@@ -190,41 +210,202 @@
             </div>
           </div>
 
-          <!-- Plans Catalog Governance -->
-          <div class="card">
+        </div>
+
+        <!-- =================================================== -->
+        <!-- VIEW 1B: ADMIN - SETUP NEW SUBSCRIPTION PLAN        -->
+        <!-- =================================================== -->
+        <div id="admin-create-plan-view" class="view-panel">
+          <div class="section-header">
+            <div>
+              <h1 class="section-title">➕ Set Up New Subscription Plan & Services</h1>
+              <p class="section-subtitle">Create service packages for any company with capacity limits, deadlines & staff commission allotments.</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="switchSidebarTab('admin-view')">← Back to Dashboard</button>
+          </div>
+
+          <div class="card" style="max-width: 800px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px;">
+              <div class="form-group">
+                <label>Plan Name / Title</label>
+                <input id="new-plan-name" placeholder="e.g. MedCare Hospital Billing Suite">
+              </div>
+              <div class="form-group">
+                <label>Plan Number / Code</label>
+                <input id="new-plan-code" placeholder="e.g. PLN-0109">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Service Description & Inclusions</label>
+              <textarea id="new-plan-desc" rows="2" placeholder="Describe the recurring digital services, server allocation, and customer entitlements provided by this plan."></textarea>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px;">
+              <div class="form-group">
+                <label>Industry / Category</label>
+                <select id="new-plan-cat">
+                  <option value="Retail">Retail</option>
+                  <option value="Healthcare">Healthcare</option>
+                  <option value="Finance">Finance</option>
+                  <option value="Tech">Tech</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Billing Period</label>
+                <select id="new-plan-period">
+                  <option value="monthly">Monthly</option>
+                  <option value="yearly">Yearly</option>
+                  <option value="weekly">Weekly</option>
+                  <option value="daily">Daily</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Base Price (INR)</label>
+                <input type="number" id="new-plan-rate" placeholder="12500.00">
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 10px;">
+              <div class="form-group">
+                <label>Capacity Limit (Max Subscribers)</label>
+                <input type="number" id="new-plan-cap" value="100" placeholder="100">
+              </div>
+              <div class="form-group">
+                <label>Revenue Disallow Threshold (INR)</label>
+                <input type="number" id="new-plan-rev-limit" value="500000.00" placeholder="500000.00">
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px;">
+              <div class="form-group">
+                <label>Discount & Offer Deadline</label>
+                <input type="date" id="new-plan-deadline" value="2026-11-30">
+              </div>
+              <div class="form-group">
+                <label>Staff Allotment & Commission Rate (%)</label>
+                <div style="display: flex; gap: 8px;">
+                  <select id="new-plan-staff-select" style="flex: 2;">
+                    <!-- Filled dynamically by JS -->
+                  </select>
+                  <input type="number" id="new-plan-comm-rate" value="7.5" placeholder="7.5%" style="flex: 1;">
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border-color);">
+              <button class="btn btn-secondary" onclick="switchSidebarTab('admin-view')">Cancel</button>
+              <button class="btn" onclick="submitDetailedCreatePlan()">⚡ Create & Publish Plan</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- =================================================== -->
+        <!-- VIEW 1C: ADMIN - MANAGE PLANS & PRODUCT VARIANTS    -->
+        <!-- =================================================== -->
+        <div id="admin-manage-plans-view" class="view-panel">
+          <div class="section-header">
+            <div>
+              <h1 class="section-title">📦 Manage Plans & Product Variants</h1>
+              <p class="section-subtitle">Monitor traffic per plan, click for graph analytics, set limit thresholds, and disallow in real time.</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-sm" onclick="openModal('add-variant-modal')">+ Add Variant (+₹560)</button>
+              <button class="btn btn-sm" onclick="switchSidebarTab('admin-create')">+ New Plan</button>
+            </div>
+          </div>
+
+          <!-- Cards Grid for Each Plan with Traffic & Analytics -->
+          <div class="kpi-grid" id="admin-detailed-plans-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- Product Variants Table -->
+          <div class="card" style="margin-top: 24px;">
             <div class="card-header">
-              <div class="card-title">📦 Active Plans & Variants Catalog</div>
+              <div class="card-title">✨ Configured Product Variants (Attribute Price Deltas)</div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">Includes Odoo Brand Integration (+₹560 extra delta)</span>
             </div>
             <div class="table-container">
               <table>
                 <thead>
                   <tr>
-                    <th>Plan Name</th>
-                    <th>Category</th>
-                    <th>Billing Frequency</th>
-                    <th>Base Price</th>
-                    <th>Pausable</th>
+                    <th>Product Name</th>
+                    <th>Variant Name</th>
+                    <th>Extra Price Delta</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-variants-table">
+                  <!-- Filled by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- =================================================== -->
+        <!-- VIEW 1D: ADMIN - STAFF GOVERNANCE & COMMISSIONS     -->
+        <!-- =================================================== -->
+        <div id="admin-staff-view" class="view-panel">
+          <div class="section-header">
+            <div>
+              <h1 class="section-title">💼 Staff Governance & Commission Management</h1>
+              <p class="section-subtitle">Manage staff funding, allocate plans, set commission rates, and onboard new operations members.</p>
+            </div>
+            <button class="btn btn-sm" onclick="openModal('add-staff-modal')">+ Onboard New Staff</button>
+          </div>
+
+          <!-- Staff Commission Funding Table -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">👥 Staff Commission Allocation & Earnings Roster</div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">Commissions calculated live from active client subscriptions under each plan</span>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Staff Member</th>
+                    <th>Email & Contact</th>
+                    <th>Allotted Plan</th>
+                    <th>Commission Rate (%)</th>
+                    <th>Active Clients</th>
+                    <th>Generated Revenue</th>
+                    <th>Total Commission Earned</th>
                     <th>Action</th>
                   </tr>
                 </thead>
-                <tbody id="admin-plans-table">
+                <tbody id="admin-staff-commissions-table">
                   <!-- Filled by JS -->
                 </tbody>
               </table>
             </div>
           </div>
 
-          <!-- Executive System Audit Report -->
-          <div class="card" style="background: #f8fafc;">
-            <div class="card-header">
-              <div class="card-title">🛡️ System Integrity & Audit Report</div>
-              <button class="btn btn-secondary btn-sm" onclick="loadAuditReport()">Run Audit</button>
+          <!-- Onboard Staff Form Right on this Page -->
+          <div class="card" style="max-width: 600px;">
+            <div class="card-title" style="margin-bottom: 14px;">👑 Quick Onboard Operations Staff</div>
+            <div class="form-group">
+              <label>Full Name</label>
+              <input id="quick-staff-name" placeholder="e.g. Ramesh Kumar">
             </div>
-            <div id="admin-audit-content" style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
-              Click 'Run Audit' to verify organization metrics and database integrity.
+            <div class="form-group">
+              <label>Staff Work Email</label>
+              <input id="quick-staff-email" placeholder="ramesh@brightloop.local">
             </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div class="form-group">
+                <label>Phone Number</label>
+                <input id="quick-staff-phone" placeholder="+91 98765 43210">
+              </div>
+              <div class="form-group">
+                <label>Starting Commission Rate (%)</label>
+                <input type="number" id="quick-staff-comm" value="7.5" placeholder="7.5">
+              </div>
+            </div>
+            <button class="btn btn-sm" style="margin-top: 10px;" onclick="submitQuickStaff()">Authorize & Onboard Staff</button>
           </div>
-
         </div>
 
         <!-- =================================================== -->
@@ -593,6 +774,35 @@
       <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px;">
         <button class="btn btn-secondary" onclick="closeModal('register-modal')">Cancel</button>
         <button class="btn" onclick="submitRegister()">Register</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Executive Investment & Financial Audit Report PDF Modal -->
+  <div id="executive-report-modal" class="modal">
+    <div class="modal-content" style="max-width: 820px;">
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 14px;">
+        <button class="btn btn-sm" onclick="window.print()">🖨️ Print / Save as PDF</button>
+        <button class="btn btn-secondary btn-sm" onclick="copyReportShareLink()">🔗 Copy Share Link</button>
+        <button class="btn btn-secondary btn-sm" onclick="closeModal('executive-report-modal')">✕ Close</button>
+      </div>
+
+      <div class="invoice-print-container" id="printable-executive-report-content">
+        <!-- Rendered dynamically by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Plan Deep Analytics & Traffic Graph Modal -->
+  <div id="plan-analytics-modal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+        <h3 id="plan-modal-title" style="font-size: 1.25rem;">📊 Plan Traffic & Investment Analytics</h3>
+        <button class="btn btn-secondary btn-sm" onclick="closeModal('plan-analytics-modal')">✕ Close</button>
+      </div>
+
+      <div id="plan-modal-content">
+        <!-- Rendered dynamically by JS -->
       </div>
     </div>
   </div>

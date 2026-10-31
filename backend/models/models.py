@@ -16,6 +16,9 @@ class User(Base):
     role = Column(String(20), default="customer") # admin, staff, customer
     password_hash = Column(String(255), default="demo_hash")
     created_at = Column(String(50), default=lambda: datetime.now().strftime("%Y-%m-%d"))
+    commission_rate = Column(Float, default=5.0) # e.g. 5% commission on managed plans
+    assigned_plan = Column(String(150), default="All Plans")
+    total_commission_earned = Column(Float, default=0.0)
 
     subscriptions = relationship("Subscription", back_populates="customer")
 
@@ -23,6 +26,7 @@ class Plan(Base):
     __tablename__ = "plans"
 
     id = Column(Integer, primary_key=True, index=True)
+    plan_code = Column(String(50), nullable=True)
     name = Column(String(150), nullable=False)
     category = Column(String(50), default="Retail") # Retail, Healthcare, Finance, Tech, Testing
     billing_period = Column(String(20), default="monthly") # daily, weekly, monthly, yearly
@@ -32,6 +36,12 @@ class Plan(Base):
     pausable = Column(Integer, default=1)
     renewable = Column(Integer, default=1)
     description = Column(Text, nullable=True)
+    subscriber_limit = Column(Integer, default=100)
+    revenue_limit = Column(Float, default=500000.0)
+    discount_deadline = Column(String(50), nullable=True)
+    assigned_staff_id = Column(Integer, nullable=True)
+    assigned_staff_name = Column(String(100), nullable=True)
+    is_active = Column(Integer, default=1) # 1 = active, 0 = disallowed
 
     subscriptions = relationship("Subscription", back_populates="plan")
 
