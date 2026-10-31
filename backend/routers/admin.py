@@ -282,10 +282,11 @@ def disallow_and_refund_subscription(sub_id: int, db: Session = Depends(get_db))
         inv.status = "Refunded"
         refund_amount += inv.amount
         refund_pay = Payment(
-            invoice_id=inv.id,
+            invoice_number=inv.invoice_number,
             amount=-abs(inv.amount), # Negative payment indicates refund
             payment_date=datetime.now().strftime("%Y-%m-%d"),
             payment_method="System Automated Refund",
+            status="Refunded",
             reference_note=f"Admin disallowed subscription {sub.subscription_number} - 100% full refund returned to customer."
         )
         db.add(refund_pay)
