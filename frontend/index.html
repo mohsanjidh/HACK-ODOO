@@ -87,23 +87,17 @@
 
     <!-- Top Sticky Header -->
     <header>
-      <div class="logo" onclick="switchSidebarTab('home')">
+      <div class="logo" style="cursor: default;">
         <span style="font-size: 1.6rem;">⚡</span>
         <span style="font-family: 'Outfit', sans-serif;">Brightloop</span>
-        <span class="logo-badge" id="app-role-badge">ADMIN</span>
       </div>
 
       <div class="top-actions">
-        <!-- Local DB Engine Indicator -->
-        <div style="font-size: 0.78rem; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
-          <span style="color: var(--success); font-weight: bold;">●</span> Local SQLite DB (~17ms)
-        </div>
-
         <!-- User Profile Pill -->
         <div class="user-pill">
           <div class="user-avatar" id="header-avatar">B</div>
           <div style="display: flex; flex-direction: column;">
-            <span id="header-user-name" style="font-weight: 700; font-size: 0.85rem;">Bhavya Admin</span>
+            <span id="header-user-name" style="font-weight: 700; font-size: 0.85rem;">Bhavya Mehta</span>
             <span id="header-user-email" style="font-size: 0.72rem; color: var(--text-muted);">admin@brightloop.local</span>
           </div>
         </div>
@@ -141,25 +135,25 @@
 
           <!-- KPI Cards: Investments, Revenue, Expenses, ARR -->
           <div class="kpi-grid">
-            <div class="kpi-card">
+            <div class="kpi-card" style="border-top: 4px solid #0f172a;">
               <div class="kpi-label">Total Capital Invested</div>
-              <div class="kpi-value" id="kpi-cash" style="color: var(--success);">₹0.00</div>
-              <div class="kpi-sub">Cumulative B2B client investments</div>
+              <div class="kpi-value" id="kpi-cash" style="color: #0f172a;">₹0.00</div>
+              <div class="kpi-sub">✓ Cumulative B2B Client Investments</div>
             </div>
-            <div class="kpi-card">
+            <div class="kpi-card" style="border-top: 4px solid #f59e0b;">
               <div class="kpi-label">Operating Expenses (~16.5%)</div>
-              <div class="kpi-value" id="kpi-expenses" style="color: var(--warning);">₹0.00</div>
-              <div class="kpi-sub">Cloud infrastructure & payment gateway</div>
+              <div class="kpi-value" id="kpi-expenses" style="color: #b45309;">₹0.00</div>
+              <div class="kpi-sub">⚠️ Cloud Infrastructure & Overhead</div>
             </div>
-            <div class="kpi-card">
+            <div class="kpi-card" style="border-top: 4px solid #017E84;">
               <div class="kpi-label">Net Profit / Revenue</div>
-              <div class="kpi-value" id="kpi-net-profit" style="color: var(--primary);">₹0.00</div>
-              <div class="kpi-sub">Retained operational margin</div>
+              <div class="kpi-value" id="kpi-net-profit" style="color: #017E84;">₹0.00</div>
+              <div class="kpi-sub" style="color: var(--success);">⚡ Retained Net Margin (83.5%)</div>
             </div>
-            <div class="kpi-card">
+            <div class="kpi-card" style="border-top: 4px solid #4338ca;">
               <div class="kpi-label">Projected ARR (12x Run Rate)</div>
-              <div class="kpi-value" id="kpi-arr">₹0.00</div>
-              <div class="kpi-sub" style="color: var(--primary);">📈 Normalized Annual Run Rate</div>
+              <div class="kpi-value" id="kpi-arr" style="color: #4338ca;">₹0.00</div>
+              <div class="kpi-sub">📈 Normalized Annual Projection</div>
             </div>
           </div>
 
@@ -172,41 +166,15 @@
                   Monitoring cumulative investments, operating expenses, and subscriber traffic across cohorts
                 </div>
               </div>
-              <div style="display: flex; gap: 12px; font-size: 0.8rem; font-weight: 600;">
-                <span style="color: #017E84;">● Capital Invested</span>
-                <span style="color: #f59e0b;">● Expenses</span>
-                <span style="color: #10b981;">● Net Revenue</span>
+              <div style="display: flex; gap: 14px; font-size: 0.82rem; font-weight: 700;">
+                <span style="color: #0f172a;">● Capital Invested</span>
+                <span style="color: #b45309;">● Expenses (~16.5%)</span>
+                <span style="color: #017E84;">● Net Profit</span>
               </div>
             </div>
 
             <div id="all-time-graph-container" style="padding: 10px 0; min-height: 260px;">
               <!-- Rendered by JS via SVG with hover tooltips -->
-            </div>
-          </div>
-
-          <!-- Real-Time Disallow & Auto-Refund Table -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">⚡ Organization Subscriptions (Real-Time Disallow & Instant 100% Refund)</div>
-              <span style="font-size: 0.8rem; color: var(--text-muted);">Deleting a subscription marks it cancelled and issues an immediate 100% refund credit</span>
-            </div>
-            <div class="table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Sub #</th>
-                    <th>Customer</th>
-                    <th>Plan & Variant</th>
-                    <th>Qty</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="admin-subscriptions-table">
-                  <!-- Filled by JS -->
-                </tbody>
-              </table>
             </div>
           </div>
 
@@ -337,6 +305,36 @@
                   </tr>
                 </thead>
                 <tbody id="admin-variants-table">
+                  <!-- Filled by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Real-Time Disallow & Auto-Refund Subscriptions Table -->
+          <div class="card" style="margin-top: 24px;">
+            <div class="card-header">
+              <div>
+                <div class="card-title">⚡ Organization Subscriptions (Real-Time Disallow & Instant 100% Refund)</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+                  Disallowing a subscription cancels access immediately and logs an automated 100% refund credit to the client.
+                </div>
+              </div>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Sub #</th>
+                    <th>Customer</th>
+                    <th>Plan & Variant</th>
+                    <th>Qty</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-subscriptions-table">
                   <!-- Filled by JS -->
                 </tbody>
               </table>

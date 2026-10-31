@@ -72,10 +72,14 @@ function setSession(user) {
   document.getElementById("main-app-shell").style.display = "block";
 
   // Update Header UI
-  document.getElementById("header-user-name").textContent = user.name;
-  document.getElementById("header-user-email").textContent = user.email;
-  document.getElementById("app-role-badge").textContent = user.role.toUpperCase();
-  document.getElementById("header-avatar").textContent = user.name.charAt(0);
+  const nameEl = document.getElementById("header-user-name");
+  if (nameEl) nameEl.textContent = user.name;
+  const emailEl = document.getElementById("header-user-email");
+  if (emailEl) emailEl.textContent = user.email;
+  const badgeEl = document.getElementById("app-role-badge");
+  if (badgeEl) badgeEl.textContent = user.role.toUpperCase();
+  const avatarEl = document.getElementById("header-avatar");
+  if (avatarEl) avatarEl.textContent = user.name.charAt(0);
 
   // Render Role-Specific Sidebar & Route to default view
   renderSidebar(user.role);
@@ -213,6 +217,7 @@ function switchSidebarTab(tabName) {
     if (el) el.classList.add("active");
     loadAdminManagePlans();
     loadAdminVariantsTable();
+    loadAdminSubscriptions();
   } else if (tabName === "admin-staff-view" || tabName === "admin-staff") {
     document.getElementById("admin-staff-view").classList.add("active");
     const el = document.getElementById("side-admin-staff");
@@ -297,8 +302,8 @@ async function renderAllTimeInvestmentsGraph() {
       <svg viewBox="0 0 ${width} ${height}" style="width: 100%; height: auto; font-family: inherit;">
         <defs>
           <linearGradient id="invGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#017E84" stop-opacity="0.25"/>
-            <stop offset="100%" stop-color="#017E84" stop-opacity="0.0"/>
+            <stop offset="0%" stop-color="#0f172a" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#0f172a" stop-opacity="0.0"/>
           </linearGradient>
         </defs>
 
@@ -316,16 +321,16 @@ async function renderAllTimeInvestmentsGraph() {
         <path d="${areaInvested}" fill="url(#invGrad)"/>
 
         <!-- Lines -->
-        <path d="${pathInvested}" fill="none" stroke="#017E84" stroke-width="3" stroke-linecap="round"/>
-        <path d="${pathNet}" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
-        <path d="${pathExp}" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4" stroke-linecap="round"/>
+        <path d="${pathInvested}" fill="none" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="${pathNet}" fill="none" stroke="#017E84" stroke-width="3" stroke-linecap="round"/>
+        <path d="${pathExp}" fill="none" stroke="#b45309" stroke-width="2" stroke-dasharray="4" stroke-linecap="round"/>
 
         <!-- Data Point Circles and X Axis Labels -->
         ${coordsInvested.map((c, i) => `
-          <circle cx="${c.x}" cy="${c.y}" r="5" fill="#ffffff" stroke="#017E84" stroke-width="3" style="cursor: pointer;">
+          <circle cx="${c.x}" cy="${c.y}" r="5" fill="#ffffff" stroke="#0f172a" stroke-width="3" style="cursor: pointer;">
             <title>${c.data.month}\nInvested: ₹${c.data.capital_invested.toLocaleString("en-IN")}\nNet Profit: ₹${c.data.net_revenue.toLocaleString("en-IN")}\nExpenses: ₹${c.data.expenses.toLocaleString("en-IN")}\nActive Clients: ${c.data.active_subscribers}</title>
           </circle>
-          <text x="${c.x}" y="${height - 6}" fill="#64748b" font-size="11" text-anchor="middle" font-weight="600">${c.data.month}</text>
+          <text x="${c.x}" y="${height - 6}" fill="#475569" font-size="11" text-anchor="middle" font-weight="700">${c.data.month}</text>
         `).join("")}
       </svg>
       <div style="display: flex; justify-content: space-between; margin-top: 6px; padding: 0 10px; font-size: 0.75rem; color: var(--text-muted);">

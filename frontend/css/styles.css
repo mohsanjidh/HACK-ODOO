@@ -559,6 +559,35 @@ tr:hover td {
   background: #fef2f2;
 }
 
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    padding: 10px 14px;
+    gap: 8px;
+    position: sticky;
+    top: 68px;
+    z-index: 90;
+  }
+  .sidebar-title {
+    display: none;
+  }
+  .sidebar-item {
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
+  .main-content {
+    padding: 18px 16px 60px;
+  }
+}
+
 @media print {
   header, .sidebar, .btn, .modal-close {
     display: none !important;
